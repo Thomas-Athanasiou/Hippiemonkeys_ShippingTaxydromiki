@@ -14,7 +14,8 @@
         Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Helper\Taxydromiki\UpdateShopsInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Helper\Taxydromiki;
+        Hippiemonkeys\ShippingTaxydromiki\Helper\Taxydromiki,
+        Hippiemonkeys\ShippingTaxydromiki\Exception\ServiceException;
 
     class UpdateShops
     extends Taxydromiki
@@ -39,6 +40,8 @@
 
         /**
          * @inheritdoc
+         *
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\ServiceException
          */
         public function updateShops(): void
         {

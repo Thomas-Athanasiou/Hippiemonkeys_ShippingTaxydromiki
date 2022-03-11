@@ -33,6 +33,8 @@
 
         /**
          * @inheritdoc
+         *
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException
          */
         public function getById($id) : JobInterface
         {
@@ -49,6 +51,8 @@
 
         /**
          * @inheritdoc
+         * 
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException
          */
         public function getByJobId(int $jobId) : JobInterface
         {

@@ -14,12 +14,16 @@
         /**
          * Gets ID
          *
+         * @api
+         *
          * @return mixed
          */
         function getId();
 
         /**
          * Sets ID
+         *
+         * @api
          *
          * @param mixed
          *
@@ -30,12 +34,16 @@
         /**
          * Gets Code
          *
+         * @api
+         *
          * @return string
          */
         function getCode(): string;
 
         /**
          * Sets Code
+         *
+         * @api
          *
          * @param string
          *
@@ -46,12 +54,16 @@
         /**
          * Gets Code 2
          *
+         * @api
+         *
          * @return string
          */
         function getCode2(): string;
 
         /**
          * Sets Code 2
+         *
+         * @api
          *
          * @param string
          *
@@ -62,12 +74,16 @@
         /**
          * Gets Name
          *
+         * @api
+         *
          * @return string
          */
         function getName(): string;
 
         /**
          * Sets Name
+         *
+         * @api
          *
          * @param string
          *
@@ -78,12 +94,16 @@
         /**
          * Gets State
          *
+         * @api
+         *
          * @return string
          */
         function getState(): string;
 
         /**
          * Sets State
+         *
+         * @api
          *
          * @param string
          *
@@ -94,12 +114,16 @@
         /**
          * Gets City
          *
+         * @api
+         *
          * @return string
          */
         function getCity(): string;
 
         /**
          * Sets City
+         *
+         * @api
          *
          * @param string
          *
@@ -110,12 +134,16 @@
         /**
          * Gets Address
          *
+         * @api
+         *
          * @return string
          */
         function getAddress(): string;
 
         /**
          * Sets Address
+         *
+         * @api
          *
          * @param string
          *
@@ -126,12 +154,16 @@
         /**
          * Gets Telephone
          *
+         * @api
+         *
          * @return string
          */
         function getTelephone(): string;
 
         /**
          * Sets Telephone
+         *
+         * @api
          *
          * @param string
          *
@@ -142,12 +174,16 @@
         /**
          * Gets Country
          *
+         * @api
+         *
          * @return string
          */
         function getCountry(): string;
 
         /**
          * Sets Country
+         *
+         * @api
          *
          * @param string
          *
@@ -158,12 +194,16 @@
         /**
          * Gets Zip
          *
+         * @api
+         *
          * @return string
          */
         function getZip(): string;
 
         /**
          * Sets Zip
+         *
+         * @api
          *
          * @param string
          *
@@ -174,12 +214,16 @@
         /**
          * Gets Email
          *
+         * @api
+         *
          * @return string
          */
         function getEmail(): string;
 
         /**
          * Sets Email
+         *
+         * @api
          *
          * @param string
          *
@@ -190,12 +234,16 @@
         /**
          * Gets Latitude
          *
+         * @api
+         *
          * @return float
          */
         function getLatitude(): float;
 
         /**
          * Sets Latitude
+         *
+         * @api
          *
          * @param float
          *
@@ -206,12 +254,16 @@
         /**
          * Gets Longitude
          *
+         * @api
+         *
          * @return float
          */
         function getLongitude(): float;
 
         /**
          * Sets Longitude
+         *
+         * @api
          *
          * @param float
          *
@@ -222,12 +274,16 @@
         /**
          * Gets Subshop
          *
+         * @api
+         *
          * @return bool
          */
         function getSubshop(): bool;
 
         /**
          * Sets Subshop
+         *
+         * @api
          *
          * @param bool
          *
@@ -238,12 +294,16 @@
         /**
          * Gets Active
          *
+         * @api
+         *
          * @return bool
          */
         function getActive(): bool;
 
         /**
          * Sets Active
+         *
+         * @api
          *
          * @param bool
          *

@@ -16,6 +16,8 @@
         /**
          * Gets Job by Id
          *
+         * @api
+         *
          * @param mixed $id
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
@@ -24,6 +26,8 @@
 
         /**
          * Gets Job by Job Id
+         *
+         * @api
          *
          * @param int $jobId
          *
@@ -34,6 +38,8 @@
         /**
          * Gets Job by voucher
          *
+         * @api
+         *
          * @param string $voucher
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
@@ -43,6 +49,8 @@
         /**
          * Deletes Job
          *
+         * @api
+         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
          *
          * @return bool
@@ -51,6 +59,8 @@
 
         /**
          * Saves Job
+         *
+         * @api
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
          *

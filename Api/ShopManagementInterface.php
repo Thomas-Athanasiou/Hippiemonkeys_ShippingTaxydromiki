@@ -11,9 +11,10 @@
 
     interface ShopManagementInterface
     {
-
         /**
          * Saves shop provided by geniki to persistent storage
+         *
+         * @api
          *
          * @param object $soapShop
          */
@@ -22,12 +23,16 @@
         /**
          * Saves shops provided by geniki to persistent storage
          *
+         * @api
+         *
          * @param object[] $soapShops
          */
         public function saveShops(array $soapShops): void;
 
         /**
          * Cleans saved Shops that are not found in soap shops provided
+         *
+         * @api
          *
          * @param object[] $soapShops
          */

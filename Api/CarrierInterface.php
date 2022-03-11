@@ -126,12 +126,16 @@
         /**
          * Closes pending jobs
          *
+         * @api
+         *
          * @return int
          */
         function closePendingJobs(): object;
 
         /**
          * Closes Pending Job by Date
+         *
+         * @api
          *
          * @param string $dateFrom
          * @param string $dateTo
@@ -143,6 +147,8 @@
         /**
          * Cancels a Job
          *
+         * @api
+         *
          * @param int $jobId
          * @param bool $cancel
          *
@@ -153,6 +159,8 @@
         /**
          * Gets a Voucher Job
          *
+         * @api
+         *
          * @param int $jobId
          *
          * @return object
@@ -161,6 +169,8 @@
 
         /**
          * Gets Jobs From Order ID
+         *
+         * @api
          *
          * @param string $orderId
          *
@@ -171,6 +181,8 @@
         /**
          * Gets a Voucher Job
          *
+         * @api
+         *
          * @param array $vouchers
          *
          * @return object
@@ -180,12 +192,16 @@
         /**
          * Gets Shops List
          *
+         * @api
+         *
          * @return object
          */
         function getShopsList();
 
         /**
          * Does a Track Delivery Status request
+         *
+         * @api
          *
          * @return object
          */
@@ -194,12 +210,16 @@
         /**
          * Does a Track and Trace request
          *
+         * @api
+         *
          * @return object
          */
         function trackAndTrace(string $voucherNo, string $language): object;
 
         /**
          * Sends a Create Job request to taxydromiki service
+         *
+         * @api
          *
          * @param string $orderId,
          * @param string $name,

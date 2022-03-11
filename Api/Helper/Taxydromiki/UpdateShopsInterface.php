@@ -16,6 +16,8 @@
     {
         /**
          * Updates persistent shops from the external carrier service
+         *
+         * @api
          */
         public function updateShops(): void;
     }

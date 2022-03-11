@@ -15,14 +15,18 @@
     extends SearchResultsInterface
     {
         /**
-         * Gets collection items.
+         * Gets collection items
+         *
+         * @api
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface[] Array of collection items
          */
         public function getItems();
 
         /**
-         * Sets collection line items.
+         * Sets collection line items
+         *
+         * @api
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface[] $shops
          *

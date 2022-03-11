@@ -17,6 +17,8 @@
         /**
          * Gets Config
          *
+         * @api
+         *
          * @return \Hippiemonkeys\Core\Api\Helper\ConfigInterface
          */
         public function getConfig(): ConfigInterface;
@@ -24,12 +26,16 @@
         /**
          * Gets Carrier
          *
+         * @api
+         *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
          */
         public function getCarrier(): CarrierInterface;
 
         /**
          * Gets Active Flag (Whether the shipping module is active or not)
+         *
+         * @api
          *
          * @return bool
          */

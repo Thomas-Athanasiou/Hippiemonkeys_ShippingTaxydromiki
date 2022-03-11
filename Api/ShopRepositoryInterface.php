@@ -18,6 +18,8 @@
         /**
          * Gets Shop by ID
          *
+         * @api
+         *
          * @param mixed $id
          *
          * @return $this
@@ -26,6 +28,8 @@
 
         /**
          * Gets Shops List by search criteria provided
+         *
+         * @api
          *
          * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
          *
@@ -36,6 +40,8 @@
         /**
          * Deletes Shop
          *
+         * @api
+         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface $shop
          *
          * @return bool
@@ -44,6 +50,8 @@
 
         /**
          * Saves Shop
+         *
+         * @api
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface $shop
          *

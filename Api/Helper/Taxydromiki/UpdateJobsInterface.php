@@ -16,6 +16,8 @@
     {
         /**
          * Updates persistent jobs from the external carrier service
+         *
+         * @api
          */
         public function updateJobs(): void;
     }

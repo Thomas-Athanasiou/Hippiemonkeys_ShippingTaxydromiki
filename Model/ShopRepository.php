@@ -11,9 +11,7 @@
 
     use Magento\Framework\Api\SearchCriteriaInterface,
         Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface,
-
         Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop as ResourceModel,
-
         Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterfaceFactory as SearchResultInterfaceFactory,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface,
@@ -48,6 +46,8 @@
 
         /**
          * @inheritdoc
+         *
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException
          */
         public function getById($id) : ShopInterface
         {
