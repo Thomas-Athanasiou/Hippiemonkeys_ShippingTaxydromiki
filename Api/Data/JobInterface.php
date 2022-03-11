@@ -1,6 +1,6 @@
 <?php
     /**
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou at Hippiemonkeys | @Thomas-Athanasiou
      * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
@@ -23,12 +23,16 @@
         /**
          * Gets Id
          *
+         * @api
+         *
          * @return mixed
          */
         function getId();
 
         /**
          * Sets Id
+         *
+         * @api
          *
          * @param mixed $jobId
          *
@@ -39,12 +43,16 @@
         /**
          * Gets Job Id
          *
+         * @api
+         *
          * @return int
          */
         function getJobId() : int;
 
         /**
          * Sets Job Id
+         *
+         * @api
          *
          * @param int $jobId
          *
@@ -55,12 +63,16 @@
         /**
          * Gets Voucher
          *
+         * @api
+         *
          * @return string
          */
         function getVoucher() : string;
 
         /**
          * Sets Voucher
+         *
+         * @api
          *
          * @param string $voucher
          *
@@ -71,12 +83,16 @@
         /**
          * Gets Canceled condition
          *
+         * @api
+         *
          * @return bool
          */
         function getCanceled() : bool;
 
         /**
          * Sets Canceled condition
+         *
+         * @api
          *
          * @param bool $canceled
          *
@@ -87,12 +103,16 @@
         /**
          * Gets Status
          *
+         * @api
+         *
          * @return int
          */
         function getStatus() : int;
 
         /**
          * Sets Status
+         *
+         * @api
          *
          * @param int $status
          *

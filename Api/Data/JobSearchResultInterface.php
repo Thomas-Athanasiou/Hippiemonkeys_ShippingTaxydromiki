@@ -1,6 +1,6 @@
 <?php
     /**
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou at Hippiemonkeys | @Thomas-Athanasiou
      * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
@@ -17,6 +17,8 @@
         /**
          * Gets collection of Job items.
          *
+         * @api
+         *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface[] Array of collection line items.
          */
         public function getItems();
@@ -24,7 +26,10 @@
         /**
          * Sets collection of Job items.
          *
+         * @api
+         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface[] $jobs
+         *
          * @return $this
          */
         public function setItems(array $jobs);
