@@ -1,0 +1,12 @@
+"There has been an error in this shipment request, Error Code: %1","Υπήρξε πρόβλημα στο αίτημα δημιουργίας αποστολής, Κωδικός σφάλματος %1"
+"Authorization with taxydromiki service failed.","Ή εξουσιοδότηση με την υπηρεσία της γενικής ταχυδρομικής απέτυχε.'
+"Unable to get track status from taxydromiki service, Please try again later.","Δεν είναι δυνατή η λήψη της κατάστασης του αριθμού εντοπισμού από την υπηρεσία της γενικής ταχυδρομικής, Παρακαλώ δοκιμάστε ξανά αργότερα."
+"The Job with ID \"%1\" that was requested doesn\'t exist. Verify the job and try again","Η Εργασία με Αναγνωριστικό \"%1\" που ζητήθηκε δεν υπάρχει. Επαληθεύστε την εργασία και δοκιμάστε ξανά"
+"The Job with Job ID \"%1\" that was requested doesn\'t exist. Verify the job and try again","Η Εργασία με Αναγνωριστικό εργασίας \"%1\" που ζητήθηκε δεν υπάρχει. Επαληθεύστε την εργασία και δοκιμάστε ξανά"
+"The Job with Voucher Code \"%1\" that was requested doesn\'t exist. Verify the job and try again","Η Εργασία με Κωρικό voucher \"%1\" που ζητήθηκε δεν υπάρχει. Επαληθεύστε την εργασία και δοκιμάστε ξανά"
+"%1 - %2 at %3","%1 - %2 στις %3"
+"%1, delivered at %2,"%1, παραδόθηκε στις %2"
+"The Shop with ID \"%1\" that was requested doesn\'t exist. Verify the Shop and try again.","Το κατάστημα με το Αναγνωριστικό \"%1\" που ζητήθηκε δεν υπάρχει. Επαληθεύστε το κατάστημα και δοκιμάστε ξανά."
+"Unable to update geniki shops, Geniki service replied with code: %1","Δεν ήταν δυνατή η ενημέρωση των καταστημάτων της γενικής, η υπηρεσία γενικής απάντησε με κωδικό: %1"
+"Shops","Καταστήματα"
+"Jobs","Εργασίες"

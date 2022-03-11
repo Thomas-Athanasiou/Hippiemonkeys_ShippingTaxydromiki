@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Thomas Athanasiou at Hippiemonkeys
+    Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+    Hippiemonkeys_ShippingTaxydromiki
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="hippiemonkeys_shippingtaxydromiki_job" resource="default" engine="innodb" comment="Hippiemonkeys Shipping - Taxydromiki - Job">
+        <column xsi:type="int" name="id" nullable="false" unsigned="true" identity="true" comment="ID" />
+        <column xsi:type="int" name="job_id" nullable="false" unsigned="true" comment="Job ID" />
+        <column xsi:type="varchar" name="voucher" nullable="false" length="64" comment="Job Voucher" />
+        <column xsi:type="smallint" name="canceled" nullable="false" comment="Job Canceled" />
+        <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_JOB_ID_PK">
+            <column name="id" />
+        </constraint>
+        <constraint xsi:type="unique" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_JOB_JOB_ID_UN">
+            <column name="job_id" />
+        </constraint>
+        <constraint xsi:type="unique" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_JOB_VOUCHER_UN">
+            <column name="voucher" />
+        </constraint>
+    </table>
+    <table name="hippiemonkeys_shippingtaxydromiki_shop">
+        <column xsi:type="int" name="id" nullable="false" unsigned="true" identity="true" comment="ID" />
+        <column xsi:type="varchar" name="code" nullable="false" length="64" comment="Shop Code" />
+        <column xsi:type="varchar" name="code2" nullable="false" length="64" comment="Shop Secondary Code" />
+        <column xsi:type="varchar" name="name" nullable="false" length="64" comment="Shop Description" />
+        <column xsi:type="varchar" name="state" nullable="false" length="64" comment="Shop State" />
+        <column xsi:type="varchar" name="city" nullable="false" length="64" comment="Shop City" />
+        <column xsi:type="varchar" name="address" nullable="false" length="64" comment="Shop Address" />
+        <column xsi:type="varchar" name="telephone" nullable="false" length="16" comment="Shop Telephone" />
+        <column xsi:type="varchar" name="country" nullable="false" length="4" comment="Shop Country" />
+        <column xsi:type="varchar" name="zip" nullable="false" length="64" comment="Shop Zip" />
+        <column xsi:type="varchar" name="email" nullable="false" length="64" comment="Shop Email" />
+        <column xsi:type="decimal" name="longitude" nullable="false" scale="8" precision="12" comment="Shop Longitude" />
+        <column xsi:type="decimal" name="latitude" nullable="false" scale="8" precision="12" comment="Shop Latitude" />
+        <column xsi:type="boolean" name="subshop" nullable="false" comment="If true the Shop is a subshop" />
+        <column xsi:type="boolean" name="active" nullable="false" comment="If true the Shop is active" />
+        <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_SHOP_ID_PK">
+            <column name="id" />
+        </constraint>
+    </table>
+</schema>

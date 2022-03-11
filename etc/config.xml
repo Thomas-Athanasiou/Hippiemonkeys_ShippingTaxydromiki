@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Thomas Athanasiou at Hippiemonkeys
+    Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+    Hippiemonkeys_ShippingTaxydromiki
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <hippiemonkeysshippingtaxydromiki>
+                <active>1</active>
+                <wsdl_url>https://voucher.taxydromiki.gr/JobServicesV2.asmx?WSDL</wsdl_url>
+                <title>Taxydromiki</title>
+                <zip_code_check>1</zip_code_check>
+                <sallowspecific>0</sallowspecific>
+                <showmethod>1</showmethod>
+                <sort_order>15</sort_order>
+                <model>Hippiemonkeys\ShippingTaxydromiki\Model\Carrier</model>
+                <taxydromiki_username></taxydromiki_username>
+                <taxydromiki_password></taxydromiki_password>
+                <taxydromiki_api_key></taxydromiki_api_key>
+                <use_store_shipper_data>0</use_store_shipper_data>
+                <max_package_weight>50000</max_package_weight>
+                <pdf_format>Sticker</pdf_format>
+                <pdf_extra_info_format>None</pdf_extra_info_format>
+                <soap_mode>0</soap_mode>
+                <soap_language>el</soap_language>
+                <model>Hippiemonkeys\ShippingTaxydromiki\Model\Carrier</model>
+            </hippiemonkeysshippingtaxydromiki>
+        </carriers>
+    </default>
+</config>
