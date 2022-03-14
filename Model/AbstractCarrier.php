@@ -124,14 +124,14 @@
                 $trackAndTraceResult         = $this->trackAndTrace($tracking, $this->getSoapLanguage())->TrackAndTraceResult;
                 if($trackAndTraceResult->Result === static::RESULT_CODE_SUCCESS){
                     $trackSummary 	= [];
-					$checkpoints 	= $trackAndTraceResult->Checkpoints;
-					if(is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint)){
-						$checkpoints = $checkpoints->Checkpoint;
-					}
+                    $checkpoints 	= $trackAndTraceResult->Checkpoints;
+                    if(is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint)){
+                        $checkpoints = $checkpoints->Checkpoint;
+                    }
 
-					foreach((array) $checkpoints as $checkpoint){
-						$trackSummary[] = __('%1 - %2 at %3', $checkpoint->Shop ?? '', $checkpoint->Status ?? '', date('d/m/Y, H:i', \strtotime($checkpoint->StatusDate)) ?? date('d/m/Y, H:i'));
-					}
+                    foreach((array) $checkpoints as $checkpoint){
+                        $trackSummary[] = __('%1 - %2 at %3', $checkpoint->Shop ?? '', $checkpoint->Status ?? '', date('d/m/Y, H:i', \strtotime($checkpoint->StatusDate)) ?? date('d/m/Y, H:i'));
+                    }
 
                     $trackStatus = $this->getTrackingStatusFactory()->create();
                     $trackStatus->setCarrier($carrierCode);
