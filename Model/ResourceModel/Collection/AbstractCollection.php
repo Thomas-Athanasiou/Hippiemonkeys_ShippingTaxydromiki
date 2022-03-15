@@ -32,6 +32,7 @@
         {
             return $this->_searchCriteria;
         }
+
         /**
          * @inheritdoc
          */
@@ -48,6 +49,7 @@
         {
             return $this->getSize();
         }
+
         /**
          * @inheritdoc
          */
@@ -55,6 +57,7 @@
         {
             return $this;
         }
+
         /**
          * @inheritdoc
          */

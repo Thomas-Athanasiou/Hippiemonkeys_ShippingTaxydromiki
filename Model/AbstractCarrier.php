@@ -68,7 +68,6 @@
          * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackingStatusFactory
          * @param \Magento\Directory\Helper\Data $directoryData
          * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $jobFactory,
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface $jobRepository,
          * @param \Magento\Framework\Webapi\Soap\ClientFactory $clientFactory,
