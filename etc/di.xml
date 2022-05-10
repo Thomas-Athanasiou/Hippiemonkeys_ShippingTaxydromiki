@@ -69,4 +69,10 @@
             <argument name="config" xsi:type="object">Hippiemonkeys\ShippingTaxydromiki\Helper\Config\Section\Generic</argument>
         </arguments>
     </type>
+    <virtualType name="Hippiemonkeys\ShippingTaxydromiki\Helper\Config\Section\Carrier" type="Hippiemonkeys\Core\Helper\Config\Section\Group">
+        <arguments>
+            <argument name="section" xsi:type="string">carriers</argument>
+            <argument name="group" xsi:type="string">hippiemonkeysshippingtaxydromiki</argument>
+        </arguments>
+    </virtualType>
 </config>

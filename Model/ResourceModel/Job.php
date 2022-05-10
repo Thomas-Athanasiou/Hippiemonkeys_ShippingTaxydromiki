@@ -21,7 +21,8 @@
             FIELD_ID        = 'id',
             FIELD_JOB_ID    = 'job_id',
             FIELD_VOUCHER   = 'voucher',
-            FIELD_CANCELED  = 'canceled';
+            FIELD_CANCELED  = 'canceled',
+            FIELD_STATUS  = 'status';
 
         protected const
             TABLE_MAIN = 'hippiemonkeys_shippingtaxydromiki_job';

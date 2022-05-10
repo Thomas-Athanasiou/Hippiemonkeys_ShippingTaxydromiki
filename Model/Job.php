@@ -91,5 +91,21 @@
         {
             return $this->setData(ResourceModel::FIELD_CANCELED, (string) $canceled);
         }
+
+        /**
+         * @inheritdoc
+         */
+        function getStatus() : int
+        {
+            return (int) $this->getData(ResourceModel::FIELD_STATUS);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        function setStatus(int $status): JobInterface
+        {
+            return $this->setData(ResourceModel::FIELD_STATUS, (string) $status);
+        }
     }
 ?>
