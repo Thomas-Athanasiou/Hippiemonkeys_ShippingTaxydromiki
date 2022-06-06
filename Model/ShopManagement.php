@@ -78,7 +78,9 @@
             $searchCriteriaBuilder->addFilter(ResourceModel::FIELD_CITY, $shopCity, 'eq');
             $searchCriteriaBuilder->addFilter(ResourceModel::FIELD_ADDRESS, $shopAddress, 'eq');
 
-            $shop = $shopRepository->getList( $searchCriteriaBuilder->create() )->getItems() [0] ?? $shopFactory->create();
+			$persistentShops = $shopRepository->getList( $searchCriteriaBuilder->create() )->getItems();
+
+			$shop = \count($persistentShops) > 0 ? \array_pop($persistentShops) : $shopFactory->create();
             $shop->setCode($shopCode);
             $shop->setCode2($shopCode2);
             $shop->setName($shopName);
