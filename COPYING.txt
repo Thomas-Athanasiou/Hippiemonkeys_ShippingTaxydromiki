@@ -1,4 +1,4 @@
-Copyright © 2022-present
+Copyright © 2022-present Hippiemonkeys Web Inteligence EE
 
 This file is part of Hippiemonkeys/ShippingTaxydromiki.
 
