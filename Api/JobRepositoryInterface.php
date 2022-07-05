@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -20,6 +20,7 @@
          * Gets Job by Id
          *
          * @api
+         * @access public
          *
          * @param mixed $id
          *
@@ -31,6 +32,7 @@
          * Gets Job by Job Id
          *
          * @api
+         * @access public
          *
          * @param int $jobId
          *
@@ -42,6 +44,7 @@
          * Gets Job by voucher
          *
          * @api
+         * @access public
          *
          * @param string $voucher
          *
@@ -53,6 +56,7 @@
          * Deletes Job
          *
          * @api
+         * @access public
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
          *
@@ -64,6 +68,7 @@
          * Saves Job
          *
          * @api
+         * @access public
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
          *

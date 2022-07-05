@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -27,6 +27,7 @@
          * Gets Id
          *
          * @api
+         * @access public
          *
          * @return mixed
          */
@@ -36,6 +37,7 @@
          * Sets Id
          *
          * @api
+         * @access public
          *
          * @param mixed $jobId
          *
@@ -47,6 +49,7 @@
          * Gets Job Id
          *
          * @api
+         * @access public
          *
          * @return int
          */
@@ -56,6 +59,7 @@
          * Sets Job Id
          *
          * @api
+         * @access public
          *
          * @param int $jobId
          *
@@ -67,6 +71,7 @@
          * Gets Voucher
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -76,6 +81,7 @@
          * Sets Voucher
          *
          * @api
+         * @access public
          *
          * @param string $voucher
          *
@@ -87,6 +93,7 @@
          * Gets Canceled condition
          *
          * @api
+         * @access public
          *
          * @return bool
          */
@@ -96,6 +103,7 @@
          * Sets Canceled condition
          *
          * @api
+         * @access public
          *
          * @param bool $canceled
          *
@@ -107,6 +115,7 @@
          * Gets Status
          *
          * @api
+         * @access public
          *
          * @return int
          */
@@ -116,6 +125,7 @@
          * Sets Status
          *
          * @api
+         * @access public
          *
          * @param int $status
          *

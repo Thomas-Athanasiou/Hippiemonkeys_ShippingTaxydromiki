@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -130,6 +130,7 @@
          * Closes pending jobs
          *
          * @api
+         * @access public
          *
          * @return int
          */
@@ -139,6 +140,7 @@
          * Closes Pending Job by Date
          *
          * @api
+         * @access public
          *
          * @param string $dateFrom
          * @param string $dateTo
@@ -151,6 +153,7 @@
          * Cancels a Job
          *
          * @api
+         * @access public
          *
          * @param int $jobId
          * @param bool $cancel
@@ -163,6 +166,7 @@
          * Gets a Voucher Job
          *
          * @api
+         * @access public
          *
          * @param int $jobId
          *
@@ -174,6 +178,7 @@
          * Gets Jobs From Order ID
          *
          * @api
+         * @access public
          *
          * @param string $orderId
          *
@@ -185,6 +190,7 @@
          * Gets a Voucher Job
          *
          * @api
+         * @access public
          *
          * @param array $vouchers
          *
@@ -196,6 +202,7 @@
          * Gets Shops List
          *
          * @api
+         * @access public
          *
          * @return object
          */
@@ -205,6 +212,7 @@
          * Does a Track Delivery Status request
          *
          * @api
+         * @access public
          *
          * @return object
          */
@@ -214,6 +222,7 @@
          * Does a Track and Trace request
          *
          * @api
+         * @access public
          *
          * @return object
          */
@@ -223,6 +232,7 @@
          * Sends a Create Job request to taxydromiki service
          *
          * @api
+         * @access public
          *
          * @param string $orderId,
          * @param string $name,

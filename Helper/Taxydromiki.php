@@ -1,7 +1,7 @@
 <?php
     /**
      * @author Thomas Athanasiou at Hippiemonkeys | @Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromikiHelperjob
      */
 
@@ -20,6 +20,8 @@
     implements TaxydromikiInterface
     {
         /**
+         * Constructor
+         *
          * @param \Psr\Log\LoggerInterface $logger
          * @param \Hippiemonkeys\Core\Api\Helper\ConfigInterface $config
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier

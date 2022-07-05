@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -22,6 +22,7 @@
          * Gets Shop by ID
          *
          * @api
+         * @access public
          *
          * @param mixed $id
          *
@@ -33,6 +34,7 @@
          * Gets Shops List by search criteria provided
          *
          * @api
+         * @access public
          *
          * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
          *
@@ -44,6 +46,7 @@
          * Deletes Shop
          *
          * @api
+         * @access public
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface $shop
          *
@@ -55,6 +58,7 @@
          * Saves Shop
          *
          * @api
+         * @access public
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface $shop
          *

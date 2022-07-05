@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -21,20 +21,22 @@
          * Gets collection items
          *
          * @api
+         * @access public
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface[] Array of collection items
          */
-        public function getItems();
+        function getItems();
 
         /**
          * Sets collection line items
          *
          * @api
+         * @access public
          *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface[] $shops
          *
          * @return $this
          */
-        public function setItems(array $shops);
+        function setItems(array $shops);
     }
 ?>

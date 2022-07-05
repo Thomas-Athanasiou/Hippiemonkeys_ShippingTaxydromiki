@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -18,27 +18,30 @@
          * Saves shop provided by geniki to persistent storage
          *
          * @api
+         * @access public
          *
          * @param object $soapShop
          */
-        public function saveShop(object $soapShop): void;
+        function saveShop(object $soapShop): void;
 
         /**
          * Saves shops provided by geniki to persistent storage
          *
          * @api
+         * @access public
          *
          * @param object[] $soapShops
          */
-        public function saveShops(array $soapShops): void;
+        function saveShops(array $soapShops): void;
 
         /**
          * Cleans saved Shops that are not found in soap shops provided
          *
          * @api
+         * @access public
          *
          * @param object[] $soapShops
          */
-        public function cleanPersistentShops(array $soapShops): void;
+        function cleanPersistentShops(array $soapShops): void;
     }
 ?>

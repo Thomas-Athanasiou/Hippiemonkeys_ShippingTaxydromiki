@@ -4,7 +4,7 @@
      *
      * @author Thomas Athanasiou at Hippiemonkeys
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -18,6 +18,7 @@
          * Gets ID
          *
          * @api
+         * @access public
          *
          * @return mixed
          */
@@ -27,6 +28,7 @@
          * Sets ID
          *
          * @api
+         * @access public
          *
          * @param mixed
          *
@@ -38,6 +40,7 @@
          * Gets Code
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -47,6 +50,7 @@
          * Sets Code
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -58,6 +62,7 @@
          * Gets Code 2
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -67,6 +72,7 @@
          * Sets Code 2
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -78,6 +84,7 @@
          * Gets Name
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -87,6 +94,7 @@
          * Sets Name
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -98,6 +106,7 @@
          * Gets State
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -107,6 +116,7 @@
          * Sets State
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -118,6 +128,7 @@
          * Gets City
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -127,6 +138,7 @@
          * Sets City
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -138,6 +150,7 @@
          * Gets Address
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -147,6 +160,7 @@
          * Sets Address
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -158,6 +172,7 @@
          * Gets Telephone
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -167,6 +182,7 @@
          * Sets Telephone
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -178,6 +194,7 @@
          * Gets Country
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -187,6 +204,7 @@
          * Sets Country
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -198,6 +216,7 @@
          * Gets Zip
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -207,6 +226,7 @@
          * Sets Zip
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -218,6 +238,7 @@
          * Gets Email
          *
          * @api
+         * @access public
          *
          * @return string
          */
@@ -227,6 +248,7 @@
          * Sets Email
          *
          * @api
+         * @access public
          *
          * @param string
          *
@@ -238,6 +260,7 @@
          * Gets Latitude
          *
          * @api
+         * @access public
          *
          * @return float
          */
@@ -247,6 +270,7 @@
          * Sets Latitude
          *
          * @api
+         * @access public
          *
          * @param float
          *
@@ -258,6 +282,7 @@
          * Gets Longitude
          *
          * @api
+         * @access public
          *
          * @return float
          */
@@ -267,6 +292,7 @@
          * Sets Longitude
          *
          * @api
+         * @access public
          *
          * @param float
          *
@@ -278,6 +304,7 @@
          * Gets Subshop
          *
          * @api
+         * @access public
          *
          * @return bool
          */
@@ -287,6 +314,7 @@
          * Sets Subshop
          *
          * @api
+         * @access public
          *
          * @param bool
          *
@@ -298,6 +326,7 @@
          * Gets Active
          *
          * @api
+         * @access public
          *
          * @return bool
          */
@@ -307,6 +336,7 @@
          * Sets Active
          *
          * @api
+         * @access public
          *
          * @param bool
          *
