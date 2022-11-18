@@ -27,6 +27,7 @@
          * Gets Id
          *
          * @api
+         *
          * @access public
          *
          * @return mixed
@@ -37,6 +38,7 @@
          * Sets Id
          *
          * @api
+         *
          * @access public
          *
          * @param mixed $jobId

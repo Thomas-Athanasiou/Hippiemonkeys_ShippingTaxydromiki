@@ -16,12 +16,6 @@
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\JobRepository" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\JobManagement" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job\Collection" />
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\MethodInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\Method"/>
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\MethodRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\MethodRepository" />
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\MethodSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Method\Collection" />
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\DataMethodTitleInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\MethodTitle"/>
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\MethodTitleRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\MethodTitleRepository" />
-    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\MethodTitleSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\MethodTitle\Collection" />
     <type name="Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\PdfExtraInfoFormat">
         <arguments>
             <argument name="optionArray" xsi:type="array">
@@ -55,7 +49,9 @@
     </type>
     <type name="Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\Model">
         <arguments>
-            <argument name="optionArray" xsi:type="array"></argument>
+            <argument name="optionArray" xsi:type="array">
+                <item name="Hippiemonkeys\ShippingTaxydromiki\Model\Carrier" xsi:type="string">Backend Only</item>
+            </argument>
         </arguments>
     </type>
     <virtualType name="Hippiemonkeys\ShippingTaxydromiki\Helper\Config\Section\Generic" type="Hippiemonkeys\Core\Helper\Config\Section\Group">

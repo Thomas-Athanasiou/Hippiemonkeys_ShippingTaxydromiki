@@ -57,6 +57,10 @@
             VOUCHER_TYPE            = 'Voucher';
 
         /**
+         * Constructor
+         *
+         * @access public
+         *
          * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
          * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
          * @param \Psr\Log\LoggerInterface $logger
@@ -85,11 +89,9 @@
             TrackingStatusFactory $trackingStatusFactory,
             DirectoryData $directoryData,
             StockRegistryInterface $stockRegistry,
-
             JobInterfaceFactory $jobFactory,
             JobRepositoryInterface $jobRepository,
             ClientFactory $clientFactory,
-
             array $data = []
         )
         {
@@ -115,20 +117,25 @@
         /**
          * @inheritdoc
          */
-        public function getTracking($trackings){
+        public function getTracking($trackings)
+        {
             $result         = $this->getTrackingResultFactory()->create();
             $carrierCode    = $this->getCarrierCode();
             $carrierTitle   = $this->getCarrierTitle();
-            foreach((array) $trackings as $tracking){
+            foreach((array) $trackings as $tracking)
+            {
                 $trackAndTraceResult         = $this->trackAndTrace($tracking, $this->getSoapLanguage())->TrackAndTraceResult;
-                if($trackAndTraceResult->Result === static::RESULT_CODE_SUCCESS){
+                if($trackAndTraceResult->Result === static::RESULT_CODE_SUCCESS)
+                {
                     $trackSummary 	= [];
                     $checkpoints 	= $trackAndTraceResult->Checkpoints;
-                    if(is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint)){
+                    if(is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint))
+                    {
                         $checkpoints = $checkpoints->Checkpoint;
                     }
 
-                    foreach((array) $checkpoints as $checkpoint){
+                    foreach((array) $checkpoints as $checkpoint)
+                    {
                         $trackSummary[] = __('%1 - %2 at %3', $checkpoint->Shop ?? '', $checkpoint->Status ?? '', date('d/m/Y, H:i', \strtotime($checkpoint->StatusDate)) ?? date('d/m/Y, H:i'));
                     }
 

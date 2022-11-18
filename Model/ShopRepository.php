@@ -55,7 +55,8 @@
         public function getById($id) : ShopInterface
         {
             $shop = $this->_idIndex[$id] ?? null;
-            if(!$shop) {
+            if(!$shop)
+            {
                 $shop = $this->getShopFactory()->create();
                 $this->getResourceModel()->load($shop, $id, ResourceModel::FIELD_ID);
                 if (!$shop->getId())

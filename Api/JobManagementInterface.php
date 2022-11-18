@@ -12,10 +12,18 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Api;
 
+    /**
+     * @api
+     */
     interface JobManagementInterface
     {
         /**
-         * @todo
+         * Processes a Job
+         *
+         * @access public
+         *
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterface $job
          */
+        function processJob(JobInterface $job): void;
     }
 ?>
