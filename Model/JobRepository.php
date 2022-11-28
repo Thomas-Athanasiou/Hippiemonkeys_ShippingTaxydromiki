@@ -2,9 +2,11 @@
     /**
      * @Thomas-Athanasiou
      *
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -22,6 +24,10 @@
     implements JobRepositoryInterface
     {
         /**
+         * Constructor
+         *
+         * @access public
+         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job $resourceModel
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $jobFactory
          */
@@ -107,12 +113,16 @@
         /**
          * Resource Model property
          *
+         * @access private
+         *
          * @var Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job $_resourceModel
          */
         private $_resourceModel;
 
         /**
          * Gets Resource Model
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job
          */
@@ -124,12 +134,16 @@
         /**
          * Job Factory property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $_jobFactory
          */
         private $_jobFactory;
 
         /**
          * Gets Job Factory
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory
          */

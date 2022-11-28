@@ -1,8 +1,13 @@
 <?php
     /**
-     * @author Thomas Athanasiou at Hippiemonkeys | @Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
-     * @package Hippiemonkeys_ShippingTaxydromikiCronjob
+     * @Thomas-Athanasiou
+     *
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
+     * @link https://github.com/Thomas-Athanasiou
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
+     * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
     declare(strict_types=1);
@@ -20,10 +25,14 @@
     implements ShopManagementInterface
     {
         protected const
-            SHOP_SEARCH_PAGE_SIZE       = 4096,
-            SHOP_SEARCH_CURRENT_PAGE    = 1;
+            SHOP_SEARCH_PAGE_SIZE = 4096,
+            SHOP_SEARCH_CURRENT_PAGE = 1;
 
         /**
+         * Constructor
+         *
+         * @access public
+         *
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory $shopFactory
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface $shopRepository
@@ -36,10 +45,10 @@
             SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
         )
         {
-            $this->_carrier                         = $carrier;
-            $this->_shopFactory                     = $shopFactory;
-            $this->_shopRepository                  = $shopRepository;
-            $this->_searchCriteriaBuilderFactory    = $searchCriteriaBuilderFactory;
+            $this->_carrier = $carrier;
+            $this->_shopFactory = $shopFactory;
+            $this->_shopRepository = $shopRepository;
+            $this->_searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         }
 
         /**
@@ -61,13 +70,13 @@
             $shopFactory    = $this->getShopFactory();
             $shopRepository = $this->getShopRepository();
 
-            $shopCode       = $soapShop->Code;
-            $shopCode2      = $soapShop->Code2;
-            $shopName       = $soapShop->Name;
-            $shopCountry    = $soapShop->Country;
-            $shopState      = $soapShop->State;
-            $shopCity       = $soapShop->City;
-            $shopAddress    = $soapShop->Address;
+            $shopCode = $soapShop->Code;
+            $shopCode2 = $soapShop->Code2;
+            $shopName = $soapShop->Name;
+            $shopCountry = $soapShop->Country;
+            $shopState = $soapShop->State;
+            $shopCity = $soapShop->City;
+            $shopAddress = $soapShop->Address;
 
             $searchCriteriaBuilder = $this->getSearchCriteriaBuilderFactory()->create();
             $searchCriteriaBuilder->addFilter(ResourceModel::FIELD_CODE, $shopCode, 'eq');
@@ -146,12 +155,16 @@
         /**
          * Shop Factory property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory
          */
         private $_shopFactory;
 
         /**
          * Gets Shop Factory
+         *
+         * @access protected
          *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory
          */
@@ -163,12 +176,16 @@
         /**
          * Shop Repository property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface
          */
         private $_shopRepository;
 
         /**
          * Gets Shop Repository
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface
          */
@@ -180,12 +197,16 @@
         /**
          * Search Criteria Factory property
          *
-         * @var \Magento\Framework\Api\SearchCriteriaBuilderFactory
+         * @access private
+         *
+         * @var \Magento\Framework\Api\SearchCriteriaBuilderFactory $_searchCriteriaBuilderFactory
          */
         private $_searchCriteriaBuilderFactory;
 
         /**
          * Gets Search Criteria Factory
+         *
+         * @access protected
          *
          * @return \Magento\Framework\Api\SearchCriteriaBuilderFactory
          */
@@ -197,12 +218,16 @@
         /**
          * Carrier property
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $_carrier
          */
         private $_carrier;
 
         /**
          * Gets Carrier
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
          */

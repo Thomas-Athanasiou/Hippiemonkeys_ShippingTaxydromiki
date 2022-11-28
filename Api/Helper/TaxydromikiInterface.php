@@ -2,9 +2,11 @@
     /**
      * @Thomas-Athanasiou
      *
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -21,6 +23,7 @@
          * Gets Config
          *
          * @api
+         * @access public
          *
          * @return \Hippiemonkeys\Core\Api\Helper\ConfigInterface
          */
@@ -30,6 +33,7 @@
          * Gets Carrier
          *
          * @api
+         * @access public
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
          */
@@ -39,6 +43,7 @@
          * Gets Active Flag (Whether the shipping module is active or not)
          *
          * @api
+         * @access public
          *
          * @return bool
          */

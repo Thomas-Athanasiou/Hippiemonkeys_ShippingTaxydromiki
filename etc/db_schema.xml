@@ -10,6 +10,7 @@
         <column xsi:type="int" name="job_id" nullable="false" unsigned="true" comment="Job ID" />
         <column xsi:type="varchar" name="voucher" nullable="false" length="64" comment="Job Voucher" />
         <column xsi:type="smallint" name="canceled" nullable="false" comment="Job Canceled" />
+        <column xsi:type="smallint" name="status" nullable="true" comment="Job Status" />
         <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_JOB_ID_PK">
             <column name="id" />
         </constraint>

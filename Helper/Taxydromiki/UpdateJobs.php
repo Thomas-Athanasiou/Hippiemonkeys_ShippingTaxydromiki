@@ -2,9 +2,11 @@
     /**
      * @Thomas-Athanasiou
      *
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -12,7 +14,7 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Helper\Taxydromiki;
 
-    use Psr\Log\LoggerInterface,
+    use Magento\Framework\App\Helper\Context,
         Magento\Framework\Api\SearchCriteriaBuilder,
         Hippiemonkeys\Core\Api\Helper\ConfigInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
@@ -32,7 +34,7 @@
          *
          * @access public
          *
-         * @param \Psr\Log\LoggerInterface $logger
+         * @param \Magento\Framework\App\Helper\Context $context
          * @param \Hippiemonkeys\Core\Api\Helper\ConfigInterface $config
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface $jobManagement,
@@ -40,7 +42,7 @@
          * @param int $updateForStatus
          */
         public function __construct(
-            LoggerInterface $logger,
+            Context $context,
             ConfigInterface $config,
             CarrierInterface $carrier,
             JobManagementInterface $jobManagement,
@@ -49,7 +51,7 @@
             int $updateForStatus
         )
         {
-            parent::__construct($logger, $config, $carrier);
+            parent::__construct($context, $config, $carrier);
             $this->_jobManagement = $jobManagement;
             $this->_jobRepository = $jobRepository;
             $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -74,12 +76,16 @@
         /**
          * Job Management property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface
          */
         private $_jobManagement;
 
         /**
          * Gets Job Management
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface
          */
@@ -91,12 +97,16 @@
         /**
          * Job Repository property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface
          */
         private $_jobRepository;
 
         /**
          * Gets Job Repository
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface
          */
@@ -129,12 +139,16 @@
         /**
          * Update For Status property
          *
+         * @access private
+         *
          * @var int $_updateForStatus
          */
         private $_updateForStatus;
 
         /**
          * Gets Update For Status
+         *
+         * @access protected
          *
          * @return int
          */

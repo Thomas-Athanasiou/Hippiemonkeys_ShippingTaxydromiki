@@ -2,9 +2,11 @@
     /**
      * @Thomas-Athanasiou
      *
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -25,14 +27,24 @@
     class ShopRepository
     implements ShopRepositoryInterface
     {
-        protected
-            $_idIndex = [];
+        /**
+         * Id index property
+         *
+         * @access protected
+         *
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface[] $_idCache
+         */
+        protected $_idCache = [];
 
         /**
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory
-         * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterface
+         * Constructor
+         *
+         * @access public
+         *
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop $resourceModel
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory $shopFactory
+         * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterface $searchResulFactory
          */
         public function __construct(
             ResourceModel $resourceModel,
@@ -41,8 +53,8 @@
             SearchResultInterfaceFactory $searchResulFactory
         )
         {
-            $this->_resourceModel       = $resourceModel;
-            $this->_shopFactory         = $shopFactory;
+            $this->_resourceModel = $resourceModel;
+            $this->_shopFactory = $shopFactory;
             $this->_collectionProcessor = $collectionProcessor;
             $this->_searchResultFactory = $searchResulFactory;
         }
@@ -54,7 +66,7 @@
          */
         public function getById($id) : ShopInterface
         {
-            $shop = $this->_idIndex[$id] ?? null;
+            $shop = $this->_idCache[$id] ?? null;
             if(!$shop)
             {
                 $shop = $this->getShopFactory()->create();
@@ -65,7 +77,7 @@
                         __('The Shop with ID "%1" that was requested doesn\'t exist. Verify the Shop and try again.', $id)
                     );
                 }
-                $this->_idIndex[$id] = $shop;
+                $this->_idCache[$id] = $shop;
             }
             return $shop;
         }
@@ -87,7 +99,7 @@
         public function save(ShopInterface $shop) : ShopInterface
         {
             $this->getResourceModel()->save($shop);
-            $this->_idIndex[ $shop->getId() ] = $shop;
+            $this->_idCache[ $shop->getId() ] = $shop;
             return $shop;
         }
 
@@ -97,12 +109,14 @@
         public function delete(ShopInterface $shop) : bool
         {
             $this->getResourceModel()->delete($shop);
-            unset($this->_idIndex[ $shop->getId() ]);
+            unset($this->_idCache[ $shop->getId() ]);
             return $shop->isDeleted();
         }
 
         /**
          * Resource Model property
+         *
+         * @access private
          *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop
          */
@@ -110,6 +124,8 @@
 
         /**
          * Gets Resource Model
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop
          */
@@ -121,12 +137,16 @@
         /**
          * Shop Factory property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory
          */
         private $_shopFactory;
 
         /**
          * Gets Shop Factory
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory
          */
@@ -138,12 +158,16 @@
         /**
          * Collection Processor property
          *
+         * @access private
+         *
          * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
          */
         private $_collectionProcessor;
 
         /**
          * Gets Collection Processor
+         *
+         * @access protected
          *
          * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
          */
@@ -155,12 +179,16 @@
         /**
          * Search Result Factory property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\SearchResultInterfaceFactory
          */
         private $_searchResultFactory;
 
         /**
          * Gets Search Result Factory
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\SearchResultInterfaceFactory
          */

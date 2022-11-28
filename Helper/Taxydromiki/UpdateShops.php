@@ -2,9 +2,11 @@
     /**
      * @Thomas-Athanasiou
      *
-     * @author Thomas Athanasiou at Hippiemonkeys
+     * @author Thomas Athanasiou {thomas@hippiemonkeys.com}
+     * @link https://hippiemonkeys.com
      * @link https://github.com/Thomas-Athanasiou
-     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE (https://hippiemonkeys.com)
+     * @copyright Copyright (c) 2022 Hippiemonkeys Web Inteligence EE All Rights Reserved.
+     * @license http://www.gnu.org/licenses/ GNU General Public License, version 3
      * @package Hippiemonkeys_ShippingTaxydromiki
      */
 
@@ -12,7 +14,7 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Helper\Taxydromiki;
 
-    use Psr\Log\LoggerInterface,
+    use Magento\Framework\App\Helper\Context,
         Hippiemonkeys\Core\Api\Helper\ConfigInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface,
@@ -25,19 +27,23 @@
     implements UpdateShopsInterface
     {
         /**
-         * @param \Psr\Log\LoggerInterface $logger
+         * Constructor
+         *
+         * @access public
+         *
+         * @param \Magento\Framework\App\Helper\Context $context
          * @param \Hippiemonkeys\Core\Api\Helper\ConfigInterface $config
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface $shopManagement
          */
         public function __construct(
-            LoggerInterface $logger,
+            Context $context,
             ConfigInterface $config,
             CarrierInterface $carrier,
             ShopManagementInterface $shopManagement
         )
         {
-            parent::__construct($logger, $config, $carrier);
+            parent::__construct($context, $config, $carrier);
             $this->_shopManagement = $shopManagement;
         }
 
@@ -68,12 +74,16 @@
         /**
          * Shop Management property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface
          */
         private $_shopManagement;
 
         /**
          * Gets Shop Management
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface
          */
