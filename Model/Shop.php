@@ -14,9 +14,9 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
-    use Magento\Framework\Model\AbstractModel,
+    use Hippiemonkeys\Core\Model\AbstractModel,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop as ResourceModel;
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface;
 
     class Shop
     extends AbstractModel
@@ -25,17 +25,9 @@
         /**
          * @inheritdoc
          */
-        protected function _construct()
-        {
-            $this->_init(ResourceModel::class);
-        }
-
-        /**
-         * @inheritdoc
-         */
         public function getId()
         {
-            return $this->getData(ResourceModel::FIELD_ID);
+            return $this->getData(ShopResourceInterface::FIELD_ID);
         }
 
         /**
@@ -43,7 +35,7 @@
          */
         public function setId($id)
         {
-            return $this->setData(ResourceModel::FIELD_ID, $id);
+            return $this->setData(ShopResourceInterface::FIELD_ID, $id);
         }
 
         /**
@@ -51,7 +43,7 @@
          */
         public function getCode(): string
         {
-            return $this->getData(ResourceModel::FIELD_CODE);
+            return $this->getData(ShopResourceInterface::FIELD_CODE);
         }
 
         /**
@@ -59,7 +51,7 @@
          */
         public function setCode(string $code): Shop
         {
-            return $this->setData(ResourceModel::FIELD_CODE, $code);
+            return $this->setData(ShopResourceInterface::FIELD_CODE, $code);
         }
 
         /**
@@ -67,7 +59,7 @@
          */
         public function getCode2(): string
         {
-            return $this->getData(ResourceModel::FIELD_CODE2);
+            return $this->getData(ShopResourceInterface::FIELD_CODE2);
         }
 
         /**
@@ -75,7 +67,7 @@
          */
         public function setCode2(string $code2): Shop
         {
-            return $this->setData(ResourceModel::FIELD_CODE2, $code2);
+            return $this->setData(ShopResourceInterface::FIELD_CODE2, $code2);
         }
 
         /**
@@ -83,7 +75,7 @@
          */
         public function getName(): string
         {
-            return $this->getData(ResourceModel::FIELD_NAME);
+            return $this->getData(ShopResourceInterface::FIELD_NAME);
         }
 
         /**
@@ -91,7 +83,7 @@
          */
         public function setName(string $name): Shop
         {
-            return $this->setData(ResourceModel::FIELD_NAME, $name);
+            return $this->setData(ShopResourceInterface::FIELD_NAME, $name);
         }
 
         /**
@@ -99,7 +91,7 @@
          */
         public function getState(): string
         {
-            return $this->getData(ResourceModel::FIELD_STATE);
+            return $this->getData(ShopResourceInterface::FIELD_STATE);
         }
 
         /**
@@ -107,7 +99,7 @@
          */
         public function setState(string $state): Shop
         {
-            return $this->setData(ResourceModel::FIELD_STATE, $state);
+            return $this->setData(ShopResourceInterface::FIELD_STATE, $state);
         }
 
         /**
@@ -115,7 +107,7 @@
          */
         public function getCity(): string
         {
-            return $this->getData(ResourceModel::FIELD_CITY);
+            return $this->getData(ShopResourceInterface::FIELD_CITY);
         }
 
         /**
@@ -123,7 +115,7 @@
          */
         public function setCity(string $city): Shop
         {
-            return $this->setData(ResourceModel::FIELD_CITY, $city);
+            return $this->setData(ShopResourceInterface::FIELD_CITY, $city);
         }
 
         /**
@@ -131,7 +123,7 @@
          */
         public function getAddress(): string
         {
-            return $this->getData(ResourceModel::FIELD_ADDRESS);
+            return $this->getData(ShopResourceInterface::FIELD_ADDRESS);
         }
 
         /**
@@ -139,7 +131,7 @@
          */
         public function setAddress(string $address): Shop
         {
-            return $this->setData(ResourceModel::FIELD_ADDRESS, $address);
+            return $this->setData(ShopResourceInterface::FIELD_ADDRESS, $address);
         }
 
         /**
@@ -147,7 +139,7 @@
          */
         public function getTelephone(): string
         {
-            return $this->getData(ResourceModel::FIELD_TELEPHONE);
+            return $this->getData(ShopResourceInterface::FIELD_TELEPHONE);
         }
 
         /**
@@ -155,7 +147,7 @@
          */
         public function setTelephone(string $telephone): Shop
         {
-            return $this->setData(ResourceModel::FIELD_TELEPHONE, $telephone);
+            return $this->setData(ShopResourceInterface::FIELD_TELEPHONE, $telephone);
         }
 
         /**
@@ -163,7 +155,7 @@
          */
         public function getCountry(): string
         {
-            return $this->getData(ResourceModel::FIELD_COUNTRY);
+            return $this->getData(ShopResourceInterface::FIELD_COUNTRY);
         }
 
         /**
@@ -171,7 +163,7 @@
          */
         public function setCountry(string $country): ShopInterface
         {
-            return $this->setData(ResourceModel::FIELD_COUNTRY, $country);
+            return $this->setData(ShopResourceInterface::FIELD_COUNTRY, $country);
         }
 
         /**
@@ -179,7 +171,7 @@
          */
         public function getZip(): string
         {
-            return $this->getData(ResourceModel::FIELD_ZIP);
+            return $this->getData(ShopResourceInterface::FIELD_ZIP);
         }
 
         /**
@@ -187,7 +179,7 @@
          */
         public function setZip(string $zip): Shop
         {
-            return $this->setData(ResourceModel::FIELD_ZIP, $zip);
+            return $this->setData(ShopResourceInterface::FIELD_ZIP, $zip);
         }
 
         /**
@@ -195,7 +187,7 @@
          */
         public function getEmail(): string
         {
-            return $this->getData(ResourceModel::FIELD_EMAIL);
+            return $this->getData(ShopResourceInterface::FIELD_EMAIL);
         }
 
         /**
@@ -203,7 +195,7 @@
          */
         public function setEmail(string $email): Shop
         {
-            return $this->setData(ResourceModel::FIELD_EMAIL, $email);
+            return $this->setData(ShopResourceInterface::FIELD_EMAIL, $email);
         }
 
         /**
@@ -211,7 +203,7 @@
          */
         public function getLatitude(): float
         {
-            return (float) $this->getData(ResourceModel::FIELD_LATITUDE);
+            return (float) $this->getData(ShopResourceInterface::FIELD_LATITUDE);
         }
 
         /**
@@ -219,7 +211,7 @@
          */
         public function setLatitude(float $latitude): Shop
         {
-            return $this->setData(ResourceModel::FIELD_LATITUDE, (string) $latitude);
+            return $this->setData(ShopResourceInterface::FIELD_LATITUDE, (string) $latitude);
         }
 
         /**
@@ -227,7 +219,7 @@
          */
         public function getLongitude(): float
         {
-            return (float) $this->getData(ResourceModel::FIELD_LONGITUDE);
+            return (float) $this->getData(ShopResourceInterface::FIELD_LONGITUDE);
         }
 
         /**
@@ -235,16 +227,15 @@
          */
         public function setLongitude(float $longitude): Shop
         {
-            return $this->setData(ResourceModel::FIELD_LONGITUDE, (string) $longitude);
+            return $this->setData(ShopResourceInterface::FIELD_LONGITUDE, (string) $longitude);
         }
-
 
         /**
          * @inheritdoc
          */
         public function getSubshop(): bool
         {
-            return (bool) $this->getData(ResourceModel::FIELD_SUBSHOP);
+            return (bool) $this->getData(ShopResourceInterface::FIELD_SUBSHOP);
         }
 
         /**
@@ -252,7 +243,7 @@
          */
         public function setSubshop(bool $subshop): Shop
         {
-            return $this->setData(ResourceModel::FIELD_SUBSHOP, (string) $subshop);
+            return $this->setData(ShopResourceInterface::FIELD_SUBSHOP, (string) $subshop);
         }
 
 
@@ -261,7 +252,7 @@
          */
         public function getActive(): bool
         {
-            return (bool) $this->getData(ResourceModel::FIELD_ACTIVE);
+            return (bool) $this->getData(ShopResourceInterface::FIELD_ACTIVE);
         }
 
         /**
@@ -269,8 +260,7 @@
          */
         public function setActive(bool $active): Shop
         {
-            return $this->setData(ResourceModel::FIELD_ACTIVE, (string) $active);
+            return $this->setData(ShopResourceInterface::FIELD_ACTIVE, (string) $active);
         }
-
     }
 ?>

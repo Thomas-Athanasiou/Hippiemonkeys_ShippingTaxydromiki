@@ -14,11 +14,15 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
-    use Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException,
+    use Magento\Framework\Api\SearchCriteriaInterface,
+        Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException,
         Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job as ResourceModel;
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface as SearchResultInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterfaceFactory as SearchResultInterfaceFactory;
 
     class JobRepository
     implements JobRepositoryInterface
@@ -28,16 +32,22 @@
          *
          * @access public
          *
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job $resourceModel
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface $jobResource
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $jobFactory
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterfaceFactory $searchResultFactory
+         * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
          */
         public function __construct(
-            ResourceModel $resourceModel,
-            JobInterfaceFactory $jobFactory
+            JobResourceInterface $jobResource,
+            JobInterfaceFactory $jobFactory,
+            SearchResultInterfaceFactory $searchResultFactory,
+            CollectionProcessorInterface $collectionProcessor
         )
         {
-            $this->_resourceModel   = $resourceModel;
-            $this->_jobFactory      = $jobFactory;
+            $this->_jobResource = $jobResource;
+            $this->_jobFactory = $jobFactory;
+            $this->_searchResultFactory = $searchResultFactory;
+            $this->_collectionProcessor = $collectionProcessor;
         }
 
         /**
@@ -48,7 +58,7 @@
         public function getById($id) : JobInterface
         {
             $job = $this->getJobFactory()->create();
-            $this->getResourceModel()->load($job, $id, ResourceModel::FIELD_ID);
+            $this->getJobResource()->loadJobById($job, $id);
             if (!$job->getId())
             {
                 throw new NoSuchEntityException(
@@ -66,7 +76,7 @@
         public function getByJobId(int $jobId) : JobInterface
         {
             $job = $this->getJobFactory()->create();
-            $this->getResourceModel()->load($job, $jobId, ResourceModel::FIELD_JOB_ID);
+            $this->getJobResource()->loadJobByJobId($job, $jobId);
             if (!$job->getId())
             {
                 throw new NoSuchEntityException(
@@ -78,11 +88,13 @@
 
         /**
          * @inheritdoc
+         *
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException
          */
         public function getByVoucher(string $voucher) : JobInterface
         {
             $job = $this->getJobFactory()->create();
-            $this->getResourceModel()->load($job, $voucher, ResourceModel::FIELD_VOUCHER);
+            $this->getJobResource()->loadJobByVoucher($job, $voucher);
             if (!$job->getId())
             {
                 throw new NoSuchEntityException(
@@ -95,9 +107,20 @@
         /**
          * @inheritdoc
          */
+        public function getList(SearchCriteriaInterface $searchCriteria): SearchResultInterface
+        {
+            $searchResult = $this->getSearchResultFactory()->create();
+            $searchResult->setSearchCriteria($searchCriteria);
+            $this->getCollectionProcessor()->process($searchCriteria, $searchResult);
+            return $searchResult;
+        }
+
+        /**
+         * @inheritdoc
+         */
         public function save(JobInterface $job) : JobInterface
         {
-            $this->getResourceModel()->save($job);
+            $this->getJobResource()->saveJob($job);
             return $job;
         }
 
@@ -106,29 +129,29 @@
          */
         public function delete(JobInterface $job) : bool
         {
-            $this->getResourceModel()->delete($job);
+            $this->getJobResource()->deleteJob($job);
             return $job->isDeleted();
         }
 
         /**
-         * Resource Model property
+         * Job Resource property
          *
          * @access private
          *
-         * @var Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job $_resourceModel
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface $_jobResource
          */
-        private $_resourceModel;
+        private $_jobResource;
 
         /**
-         * Gets Resource Model
+         * Gets Job Resource
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface
          */
-        protected function getResourceModel(): ResourceModel
+        protected function getJobResource(): JobResourceInterface
         {
-            return $this->_resourceModel;
+            return $this->_jobResource;
         }
 
         /**
@@ -150,6 +173,48 @@
         protected function getJobFactory() : JobInterfaceFactory
         {
             return $this->_jobFactory;
+        }
+
+        /**
+         * Collection Processor property
+         *
+         * @access private
+         *
+         * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $_collectionProcessor
+         */
+        private $_collectionProcessor;
+
+        /**
+         * Gets Collection Processor
+         *
+         * @access protected
+         *
+         * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+         */
+        protected function getCollectionProcessor() : CollectionProcessorInterface
+        {
+            return $this->_collectionProcessor;
+        }
+
+        /**
+         * Search Result Factory property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingService\Api\PolicySearchResultInterfaceFactory $_searchResultFactory
+         */
+        private $_searchResultFactory;
+
+        /**
+         * Gets Search Result Factory
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingService\Api\PolicySearchResultInterfaceFactory
+         */
+        protected function getSearchResultFactory(): SearchResultInterfaceFactory
+        {
+            return $this->_searchResultFactory;
         }
     }
 ?>

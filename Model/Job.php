@@ -14,9 +14,9 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
-    use Magento\Framework\Model\AbstractModel,
+    use Hippiemonkeys\Core\Model\AbstractModel,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job as ResourceModel;
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface;
 
     class Job
     extends AbstractModel
@@ -25,17 +25,9 @@
         /**
          * @inheritdoc
          */
-        protected function _construct()
-        {
-            $this->_init(ResourceModel::class);
-        }
-
-        /**
-         * @inheritdoc
-         */
         public function getId()
         {
-            return $this->getData(ResourceModel::FIELD_ID);
+            return $this->getData(JobResourceInterface::FIELD_ID);
         }
 
         /**
@@ -43,7 +35,7 @@
          */
         public function setId($id)
         {
-            return $this->setData(ResourceModel::FIELD_ID, $id);
+            return $this->setData(JobResourceInterface::FIELD_ID, $id);
         }
 
         /**
@@ -51,7 +43,7 @@
          */
         public function getJobId(): int
         {
-            return $this->getData(ResourceModel::FIELD_JOB_ID);
+            return (int) $this->getData(JobResourceInterface::FIELD_JOB_ID);
         }
 
         /**
@@ -59,7 +51,7 @@
          */
         public function setJobId(int $jobId): Job
         {
-            return $this->setData(ResourceModel::FIELD_JOB_ID, $jobId);
+            return $this->setData(JobResourceInterface::FIELD_JOB_ID, $jobId);
         }
 
         /**
@@ -67,7 +59,7 @@
          */
         public function getVoucher(): string
         {
-            return $this->getData(ResourceModel::FIELD_VOUCHER);
+            return $this->getData(JobResourceInterface::FIELD_VOUCHER);
         }
 
         /**
@@ -75,7 +67,7 @@
          */
         public function setVoucher(string $voucher): Job
         {
-            return $this->setData(ResourceModel::FIELD_VOUCHER, $voucher);
+            return $this->setData(JobResourceInterface::FIELD_VOUCHER, $voucher);
         }
 
         /**
@@ -83,7 +75,7 @@
          */
         public function getCanceled(): bool
         {
-            return (bool) $this->getData(ResourceModel::FIELD_CANCELED);
+            return (bool) $this->getData(JobResourceInterface::FIELD_CANCELED);
         }
 
         /**
@@ -91,7 +83,23 @@
          */
         public function setCanceled(bool $canceled): Job
         {
-            return $this->setData(ResourceModel::FIELD_CANCELED, (string) $canceled);
+            return $this->setData(JobResourceInterface::FIELD_CANCELED, (string) $canceled);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function getClosed(): bool
+        {
+            return (bool) $this->getData(JobResourceInterface::FIELD_CLOSED);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function setClosed(bool $closed): Job
+        {
+            return $this->setData(JobResourceInterface::FIELD_CLOSED, (string) $closed);
         }
 
         /**
@@ -99,7 +107,7 @@
          */
         function getStatus() : int
         {
-            return (int) $this->getData(ResourceModel::FIELD_STATUS);
+            return (int) $this->getData(JobResourceInterface::FIELD_STATUS);
         }
 
         /**
@@ -107,7 +115,7 @@
          */
         function setStatus(int $status): JobInterface
         {
-            return $this->setData(ResourceModel::FIELD_STATUS, (string) $status);
+            return $this->setData(JobResourceInterface::FIELD_STATUS, (string) $status);
         }
     }
 ?>

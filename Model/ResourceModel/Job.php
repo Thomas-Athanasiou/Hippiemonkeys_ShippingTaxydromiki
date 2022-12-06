@@ -14,27 +14,53 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel;
 
-    use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+    use Hippiemonkeys\Core\Model\ResourceModel\AbstractTableResource as AbstractResource,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface;
 
     class Job
-    extends AbstractDb
+    extends AbstractResource
+    implements JobResourceInterface
     {
-        public const
-            FIELD_ID        = 'id',
-            FIELD_JOB_ID    = 'job_id',
-            FIELD_VOUCHER   = 'voucher',
-            FIELD_CANCELED  = 'canceled',
-            FIELD_STATUS  = 'status';
-
-        protected const
-            TABLE_MAIN = 'hippiemonkeys_shippingtaxydromiki_job';
+        /**
+         * @inheritdoc
+         */
+        public function saveJob(JobInterface $job): JobResourceInterface
+        {
+            return $this->save($job);
+        }
 
         /**
          * @inheritdoc
          */
-        protected function _construct()
+        public function loadJobById(JobInterface $job, $id): JobResourceInterface
         {
-            $this->_init(static::TABLE_MAIN, static::FIELD_ID);
+            return $this->load($job, $id, static::FIELD_ID);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function loadJobByJobId(JobInterface $job, int $jobId): JobResourceInterface
+        {
+            return $this->load($job, $jobId, static::FIELD_JOB_ID);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function loadJobByVoucher(JobInterface $job, string $voucher): JobResourceInterface
+        {
+            return $this->load($job, $voucher, static::FIELD_VOUCHER);
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function deleteJob(JobInterface $job): bool
+        {
+            $this->delete($job);
+            return $job->isDeleted();
         }
     }
 ?>

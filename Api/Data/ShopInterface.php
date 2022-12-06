@@ -14,18 +14,11 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Api\Data;
 
-    interface ShopInterface
-    {
-        /**
-         * Gets ID
-         *
-         * @api
-         * @access public
-         *
-         * @return mixed
-         */
-        function getId();
+    use Hippiemonkeys\Core\Api\Data\ModelInterface;
 
+    interface ShopInterface
+    extends ModelInterface
+    {
         /**
          * Sets ID
          *

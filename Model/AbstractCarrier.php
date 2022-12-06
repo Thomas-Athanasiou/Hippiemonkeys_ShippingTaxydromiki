@@ -32,6 +32,7 @@
         Hippiemonkeys\ShippingTaxydromiki\Exception\AuthenticateException,
         Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory;
 
     abstract class AbstractCarrier
@@ -40,6 +41,8 @@
     {
         /**
          * Does a create job request
+         *
+         * @access protected
          *
          * @param \Magento\Framework\DataObject $request
          *
@@ -126,8 +129,8 @@
             $carrierTitle   = $this->getCarrierTitle();
             foreach((array) $trackings as $tracking)
             {
-                $trackAndTraceResult         = $this->trackAndTrace($tracking, $this->getSoapLanguage())->TrackAndTraceResult;
-                if($trackAndTraceResult->Result === static::RESULT_CODE_SUCCESS)
+                $trackAndTraceResult = $this->trackAndTrace($tracking, $this->getSoapLanguage())->TrackAndTraceResult ?? null;
+                if($trackAndTraceResult && ($trackAndTraceResult->Result ?? static::RESULT_CODE_INVALID) === static::RESULT_CODE_SUCCESS)
                 {
                     $trackSummary 	= [];
                     $checkpoints 	= $trackAndTraceResult->Checkpoints;
@@ -207,24 +210,24 @@
          */
         public function getVouchersPdf(array $vouchers) : object
         {
-            $client     = $this->getClient();
-            $content    = static::RESULT_CODE_INVALID;
+            $client = $this->getClient();
+            $content = static::RESULT_CODE_INVALID;
+
             try
             {
                 $content = $client->GetVouchersPdf(
                     [
-                        'authKey'           => $this->getAuthenticateKey(),
-                        'format'            => $this->getPdfFormat(),
-                        'extraInfoFormat'   => $this->getPdfExtraInfoFormat(),
-                        'voucherNumbers'    => $vouchers
+                        'authKey' => $this->getAuthenticateKey(),
+                        'format' => $this->getPdfFormat(),
+                        'extraInfoFormat' => $this->getPdfExtraInfoFormat(),
+                        'voucherNumbers' => $vouchers
                     ]
                 );
-
             }
             catch(\SoapFault $soapFault)
             {
                 $content = $client->__getLastResponse();
-            };
+            }
 
             $getVouchersPdfResult = new \stdClass;
             $getVouchersPdfResult->Result = is_numeric($content) ? (int) $content : static::RESULT_CODE_SUCCESS;
@@ -267,6 +270,8 @@
 
         /**
          * Sends an Authenticate request to Taxydromiki service
+         *
+         * @access protected
          *
          * @return object
          */
@@ -336,23 +341,26 @@
          */
         protected function processShipmentRequest(DataObject $request): DataObject
         {
-            $result             = $this->getDataObjectFactory()->create();
-            $voucherResult      = $this->doCreateJobRequest($request)->CreateJobResult;
-            $voucherResultCode  = $voucherResult->Result;
-            if($voucherResultCode === static::RESULT_CODE_SUCCESS)
+            $result = $this->getDataObjectFactory()->create();
+            $createJobResult = $this->doCreateJobRequest($request)->CreateJobResult;
+            $createJobResultCode = $createJobResult->Result ?? static::RESULT_CODE_INVALID;
+            if($createJobResultCode === static::RESULT_CODE_SUCCESS)
             {
-                $voucher = $voucherResult->Voucher;
+                $voucher = $createJobResult->Voucher;
 
                 $job = $this->getJobFactory()->create();
-                $job->setJobId($voucherResult->JobId);
+                $job->setJobId($createJobResult->JobId);
                 $job->setVoucher($voucher);
                 $job->setCanceled(false);
+                $job->setClosed(false);
+                $job->setStatus(JobInterface::STATUS_NEW);
+
                 $this->getJobRepository()->save($job);
 
                 $result->setTrackingNumber($voucher);
 
-                $labelResult = $this->getVouchersPdf( [$voucher] )->GetVouchersPdfResult;
-                if($labelResult->Result === static::RESULT_CODE_SUCCESS)
+                $labelResult = $this->getVouchersPdf( [$voucher] )->GetVouchersPdfResult ?? null;
+                if($labelResult && ($labelResult->Result ?? static::RESULT_CODE_INVALID) === static::RESULT_CODE_SUCCESS)
                 {
                     $result->setShippingLabelContent( $labelResult->Content );
                 }
@@ -360,13 +368,15 @@
             else
             {
                 $result->setHasErrors($hasErrors);
-                $result->setErrors( __('There has been an error with this shipment Request, Error Code: %1', $voucherResultCode) );
+                $result->setErrors( __('There has been an error with this shipment Request, Error Code: %1', $createJobResultCode) );
             }
             return $result;
         }
 
         /**
          * Soap Client property
+         *
+         * @access private
          *
          * @var string $_authenticateKey
          */
@@ -375,6 +385,8 @@
         /**
          * Gets Session Token
          *
+         * @access protected
+         *
          * @return string
          */
         protected function getAuthenticateKey() : string
@@ -382,12 +394,12 @@
             $authenticateKey = $this->_authenticateKey;
             if(!$authenticateKey)
             {
-                $authenticateResult = $this->authenticate()->AuthenticateResult;
-                if(($authenticateResult->Result) !== static::RESULT_CODE_SUCCESS)
+                $authenticateResult = $this->authenticate()->AuthenticateResult ?? null;
+                if($authenticateResult && ($authenticateResult->Result ?? static::RESULT_CODE_INVALID) !== static::RESULT_CODE_SUCCESS)
                 {
                     throw new AuthenticateException( __('Authorization with taxydromiki service failed.') );
                 }
-                $authenticateKey = $authenticateResult->Key;
+                $authenticateKey = $authenticateResult->Key ?? '';
                 $this->setAuthenticateKey($authenticateKey);
             }
             return $authenticateKey;
@@ -395,6 +407,8 @@
 
         /**
          * Sets Authenticate Key
+         *
+         * @access protected
          *
          * @param string $authenticateKey
          */
@@ -406,12 +420,16 @@
         /**
          * Client Factory Property
          *
+         * @access private
+         *
          * @var \Magento\Framework\Webapi\Soap\ClientFactory $_clientFactory
          */
         private $_clientFactory;
 
         /**
          * Gets Client Factory
+         *
+         * @access protected
          *
          * @return \Magento\Framework\Webapi\Soap\ClientFactory
          */
@@ -421,7 +439,9 @@
         }
 
         /**
-         *  Client property
+         * Client property
+         *
+         * @access private
          *
          * @var \SoapClient $_client
          */
@@ -429,6 +449,8 @@
 
         /**
          * Gets Client
+         *
+         * @access protected
          *
          * @return \SoapClient
          */
@@ -449,6 +471,8 @@
         /**
          * Sets Client
          *
+         * @access protected
+         *
          * @param \SoapClient $client
          */
         protected function setClient(Client $client) : void
@@ -458,6 +482,8 @@
 
         /**
          * Gets Wsdl Url
+         *
+         * @access protected
          *
          * @return string
          */
@@ -469,6 +495,8 @@
         /**
          * Gets Pdf Format
          *
+         * @access protected
+         *
          * @return string
          */
         protected function getPdfFormat() : string
@@ -478,6 +506,8 @@
 
         /**
          * Gets Pdf Extra Info Format
+         *
+         * @access protected
          *
          * @return string
          */
@@ -489,6 +519,8 @@
         /**
          * Gets taxydromiki Username credential
          *
+         * @access private
+         *
          * @return string
          */
         private function getUsername(): string
@@ -498,6 +530,8 @@
 
         /**
          * Gets taxydromiki Password credential
+         *
+         * @access private
          *
          * @return string
          */
@@ -509,6 +543,8 @@
         /**
          * Gets taxydromiki Application Key credential
          *
+         * @access private
+         *
          * @return string
          */
         private function getApplicationKey(): string
@@ -518,6 +554,8 @@
 
         /**
          * Gets taxydromiki Application Key credential
+         *
+         * @access private
          *
          * @return string
          */
@@ -529,12 +567,16 @@
         /**
          * Job Factory property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterfaceFactory $_jobFactory
          */
         private $_jobFactory;
 
         /**
          * Gets Job Factory
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterfaceFactory
          */
@@ -546,12 +588,16 @@
         /**
          * Job Repository property
          *
+         * @access private
+         *
          * @var \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface $_jobRepository
          */
         private $_jobRepository;
 
         /**
          * Gets Job Factiory
+         *
+         * @access protected
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface
          */

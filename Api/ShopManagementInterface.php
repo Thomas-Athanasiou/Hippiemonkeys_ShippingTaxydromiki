@@ -45,5 +45,13 @@
          * @param object[] $soapShops
          */
         function cleanPersistentShops(array $soapShops): void;
+
+        /**
+         * Updates persistent shops from the external carrier service
+         *
+         * @api
+         * @access public
+         */
+        public function updateShops(): void;
     }
 ?>

@@ -14,11 +14,9 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job;
 
-    use Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Collection\AbstractCollection,
-        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface as SearchResultInterface,
-
+    use Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface as SearchResultInterface,
         Hippiemonkeys\ShippingTaxydromiki\Model\Job as Model,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job as ResourceModel;
+        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Collection\AbstractCollection;
 
     class Collection
     extends AbstractCollection
@@ -29,7 +27,7 @@
          */
         protected function _construct()
         {
-            $this->_init(Model::class, ResourceModel::class);
+            $this->setModel(Model::class);
         }
     }
 ?>

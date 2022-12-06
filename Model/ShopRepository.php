@@ -16,7 +16,7 @@
 
     use Magento\Framework\Api\SearchCriteriaInterface,
         Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop as ResourceModel,
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface,
         Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterfaceFactory as SearchResultInterfaceFactory,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface,
@@ -41,19 +41,19 @@
          *
          * @access public
          *
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop $resourceModel
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface $shopResource
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory $shopFactory
          * @param \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterface $searchResulFactory
          */
         public function __construct(
-            ResourceModel $resourceModel,
+            ShopResourceInterface $shopResource,
             ShopInterfaceFactory $shopFactory,
             CollectionProcessorInterface $collectionProcessor,
             SearchResultInterfaceFactory $searchResulFactory
         )
         {
-            $this->_resourceModel = $resourceModel;
+            $this->_shopResource = $shopResource;
             $this->_shopFactory = $shopFactory;
             $this->_collectionProcessor = $collectionProcessor;
             $this->_searchResultFactory = $searchResulFactory;
@@ -70,7 +70,7 @@
             if(!$shop)
             {
                 $shop = $this->getShopFactory()->create();
-                $this->getResourceModel()->load($shop, $id, ResourceModel::FIELD_ID);
+                $this->getShopResource()->loadShopById($shop, $id);
                 if (!$shop->getId())
                 {
                     throw new NoSuchEntityException(
@@ -98,7 +98,7 @@
          */
         public function save(ShopInterface $shop) : ShopInterface
         {
-            $this->getResourceModel()->save($shop);
+            $this->getShopResource()->saveShop($shop);
             $this->_idCache[ $shop->getId() ] = $shop;
             return $shop;
         }
@@ -108,30 +108,30 @@
          */
         public function delete(ShopInterface $shop) : bool
         {
-            $this->getResourceModel()->delete($shop);
+            $this->getShopResource()->deleteShop($shop);
             unset($this->_idCache[ $shop->getId() ]);
             return $shop->isDeleted();
         }
 
         /**
-         * Resource Model property
+         * Shop Resource property
          *
          * @access private
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface $_shopResource
          */
-        private $_resourceModel;
+        private $_shopResource;
 
         /**
-         * Gets Resource Model
+         * Gets Shop Resource
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface
          */
-        protected function getResourceModel(): ResourceModel
+        protected function getShopResource(): ShopResourceInterface
         {
-            return $this->_resourceModel;
+            return $this->_shopResource;
         }
 
         /**

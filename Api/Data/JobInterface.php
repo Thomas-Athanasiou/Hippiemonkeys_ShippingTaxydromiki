@@ -14,36 +14,29 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Api\Data;
 
+    use Hippiemonkeys\Core\Api\Data\ModelInterface;
+
     interface JobInterface
+    extends ModelInterface
     {
         const
-            STATUS_NONE         = 0,
-            STATUS_INTRANSIT    = 1,
-            STATUS_INSHOP       = 2,
-            STATUS_DELIVERED    = 3,
-            STATUS_CANCELED     = 4,
-            STATUS_RETURNED     = 5,
-            STATUS_PENDING      = 6;
-
-        /**
-         * Gets Id
-         *
-         * @api
-         *
-         * @access public
-         *
-         * @return mixed
-         */
-        function getId();
+            STATUS_NONE = 0,
+            STATUS_NEW = 1,
+            STATUS_PENDING = 2,
+            STATUS_INTRANSIT = 3,
+            STATUS_INSHOP = 4,
+            STATUS_INTRANSITCOURIERCHARGE = 5,
+            STATUS_DELIVERED = 6,
+            STATUS_DELIVERYFAILURE = 7,
+            STATUS_RETURNED = 8;
 
         /**
          * Sets Id
          *
          * @api
-         *
          * @access public
          *
-         * @param mixed $jobId
+         * @param mixed $id
          *
          * @return \this
          */
@@ -114,6 +107,28 @@
          * @return \this
          */
         function setCanceled(bool $canceled): JobInterface;
+
+        /**
+         * Gets Closed condition
+         *
+         * @api
+         * @access public
+         *
+         * @return bool
+         */
+        function getClosed() : bool;
+
+        /**
+         * Sets Closed condition
+         *
+         * @api
+         * @access public
+         *
+         * @param bool $closed
+         *
+         * @return \this
+         */
+        function setClosed(bool $closed): JobInterface;
 
         /**
          * Gets Status

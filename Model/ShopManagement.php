@@ -153,6 +153,29 @@
         }
 
         /**
+         * @inheritdoc
+         *
+         * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\ServiceException
+         */
+        public function updateShops(): void
+        {
+            $getShopsListResult = $this->getCarrier()->getShopsList()->GetShopsListResult;
+            $resultCode = $getShopsListResult->Result ?? CarrierInterface::RESULT_CODE_INVALID;
+            if($resultCode === CarrierInterface::RESULT_CODE_SUCCESS)
+            {
+                $soapShops = $getShopsListResult->Shops->Shop ?? [];
+                $this->saveShops($soapShops);
+                $this->cleanPersistentShops($soapShops);
+            }
+            else
+            {
+                throw new ServiceException(
+                    __('Unable to update geniki shops, Geniki service replied with code: %1', $resultCode)
+                );
+            }
+        }
+
+        /**
          * Shop Factory property
          *
          * @access private
@@ -231,7 +254,7 @@
          *
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
          */
-        protected function getCarrier(): SearchCriteriaBuilderFactory
+        protected function getCarrier(): CarrierInterface
         {
             return $this->_carrier;
         }

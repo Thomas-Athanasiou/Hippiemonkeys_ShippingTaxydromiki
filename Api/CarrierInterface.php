@@ -112,21 +112,21 @@
              */
             SERVICE_FREIGHT_TRANSPORT = 'ΦΡ',
 
-            TDS_DELIVERED   = 'DELIVERED',
-            TDS_INTRANSIT   = 'IN TRANSIT',
-            TDS_INRETURN    = 'IN RETURN',
+            TDS_DELIVERED = 'DELIVERED',
+            TDS_INTRANSIT = 'IN TRANSIT',
+            TDS_INRETURN = 'IN RETURN',
 
-            RESULT_CODE_INVALID                 = -1,
-            RESULT_CODE_SUCCESS                 = 0,
-            RESULT_CODE_ERROR_AUTHENTICATION    = 1,
-            RESULT_CODE_ERROR_NOT_IMPLEMENTED   = 2,
-            RESULT_CODE_ERROR_NO_DATA           = 3,
+            RESULT_CODE_INVALID = -1,
+            RESULT_CODE_SUCCESS = 0,
+            RESULT_CODE_ERROR_AUTHENTICATION = 1,
+            RESULT_CODE_ERROR_NOT_IMPLEMENTED = 2,
+            RESULT_CODE_ERROR_NO_DATA = 3,
             RESULT_CODE_ERROR_INVALID_OPERATION = 4,
-            RESULT_CODE_ERROR_MAX_VOUCHERS      = 5,
-            RESULT_CODE_ERROR_MAX_SUBVOUCHERS   = 6,
-            RESULT_CODE_ERROR_SQL               = 8,
-            RESULT_CODE_ERROR_JOB_NOT_FOUND     = 9,
-            RESULT_CODE_ERROR_NOT_AUTHORIZED    = 10;
+            RESULT_CODE_ERROR_MAX_VOUCHERS = 5,
+            RESULT_CODE_ERROR_MAX_SUBVOUCHERS = 6,
+            RESULT_CODE_ERROR_SQL = 8,
+            RESULT_CODE_ERROR_JOB_NOT_FOUND = 9,
+            RESULT_CODE_ERROR_NOT_AUTHORIZED = 10;
 
         /**
          * Closes pending jobs

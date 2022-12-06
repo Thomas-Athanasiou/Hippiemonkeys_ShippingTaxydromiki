@@ -14,7 +14,9 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Api;
 
-    use Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface;
+    use Magento\Framework\Api\SearchCriteriaInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface as SearchResultInterface;
 
     interface JobRepositoryInterface
     {
@@ -53,6 +55,18 @@
          * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
          */
         function getByVoucher(string $voucher): JobInterface;
+
+        /**
+         * Gets list by Search Criteria
+         *
+         * @api
+         * @access public
+         *
+         * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+         *
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface
+         */
+        function getList(SearchCriteriaInterface $searchCriteria): SearchResultInterface;
 
         /**
          * Deletes Job
