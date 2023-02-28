@@ -5,11 +5,11 @@
     Hippiemonkeys_ShippingTaxydromiki
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Hippiemonkeys_ShippingTaxydromiki" setup_version="1.2.0">
+    <module name="Hippiemonkeys_ShippingTaxydromiki" setup_version="1.3.0" schema_version="1.3.0">
         <sequence>
             <module name="Magento_Sales"/>
             <module name="Magento_Quote"/>
-            <module name="Hippiemonkeys_Shipping"/>
+            <module name="Hippiemonkeys_ShippingTrack"/>
         </sequence>
     </module>
 </config>

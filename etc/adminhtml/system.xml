@@ -30,58 +30,70 @@
                     <label>WSDL Mode</label>
                     <source_model>Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\WsdlUrl</source_model>
                 </field>
-                <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="zip_code_check" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1">
+                <field id="track_active" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Tracking Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="track_summary_format" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Track Summary Format</label>
+                </field>
+                <field id="zip_code_check" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1">
                     <label>Check Zip Code</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="taxydromiki_username" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="taxydromiki_username" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Taxydromiki Username</label>
                 </field>
-                <field id="taxydromiki_password" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="taxydromiki_password" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Taxydromiki Password</label>
                 </field>
-                <field id="taxydromiki_api_key" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="taxydromiki_api_key" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Taxydromiki API Key</label>
                 </field>
-                <field id="use_store_shipper_data" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="use_store_shipper_data" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Store's shipper Data</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="sallowspecific" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ship to Applicable Countries</label>
                     <frontend_class>shipping-applicable-country</frontend_class>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="110" showInDefault="1" showInWebsite="1">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="130" showInDefault="1" showInWebsite="1">
                     <label>Ship to Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="showmethod" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="showmethod" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Method if Not Applicable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <frontend_class>shipping-skip-hide</frontend_class>
                 </field>
-                <field id="max_package_weight" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1">
+                <field id="max_package_weight" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1">
                     <label>Max Package Weight</label>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sort Order</label>
                 </field>
-                <field id="soap_language" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="soap_language" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Soap Language</label>
                     <source_model>Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\SoapLanguage</source_model>
                 </field>
-                <field id="pdf_format" translate="label" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="pdf_format" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Pdf Format</label>
                     <source_model>Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\PdfFormat</source_model>
                 </field>
-                <field id="pdf_extra_info_format" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="pdf_extra_info_format" translate="label" type="select" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Pdf Extra Info Format</label>
                     <source_model>Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\PdfExtraInfoFormat</source_model>
+                </field>
+                <field id="default_history_status_id" translate="label" type="select" sortOrder="200" showInDefault="1">
+                    <label>Default History Status</label>
+                    <source_model>Hippiemonkeys\ShippingTrack\Model\Config\Source\Statuses</source_model>
+                    <comment>Use this status if the discovery tracking request fails</comment>
                 </field>
             </group>
         </section>

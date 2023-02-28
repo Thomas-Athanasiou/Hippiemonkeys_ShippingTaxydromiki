@@ -14,6 +14,8 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier;
 
+    use Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\OptionArray;
+
     class PdfExtraInfoFormat
     extends OptionArray
     {

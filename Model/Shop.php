@@ -23,15 +23,7 @@
     implements ShopInterface
     {
         /**
-         * @inheritdoc
-         */
-        public function getId()
-        {
-            return $this->getData(ShopResourceInterface::FIELD_ID);
-        }
-
-        /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setId($id)
         {
@@ -39,7 +31,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getCode(): string
         {
@@ -47,7 +39,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setCode(string $code): Shop
         {
@@ -55,7 +47,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getCode2(): string
         {
@@ -63,7 +55,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setCode2(string $code2): Shop
         {
@@ -71,7 +63,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getName(): string
         {
@@ -79,7 +71,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setName(string $name): Shop
         {
@@ -87,7 +79,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getState(): string
         {
@@ -95,7 +87,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setState(string $state): Shop
         {
@@ -103,7 +95,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getCity(): string
         {
@@ -111,7 +103,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setCity(string $city): Shop
         {
@@ -119,7 +111,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getAddress(): string
         {
@@ -127,7 +119,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setAddress(string $address): Shop
         {
@@ -135,7 +127,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getTelephone(): string
         {
@@ -143,7 +135,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setTelephone(string $telephone): Shop
         {
@@ -151,7 +143,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getCountry(): string
         {
@@ -159,7 +151,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setCountry(string $country): ShopInterface
         {
@@ -167,7 +159,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getZip(): string
         {
@@ -175,7 +167,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setZip(string $zip): Shop
         {
@@ -183,7 +175,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getEmail(): string
         {
@@ -191,7 +183,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setEmail(string $email): Shop
         {
@@ -199,7 +191,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getLatitude(): float
         {
@@ -207,7 +199,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setLatitude(float $latitude): Shop
         {
@@ -215,7 +207,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getLongitude(): float
         {
@@ -223,7 +215,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setLongitude(float $longitude): Shop
         {
@@ -231,7 +223,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getSubshop(): bool
         {
@@ -239,7 +231,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setSubshop(bool $subshop): Shop
         {
@@ -248,7 +240,7 @@
 
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getActive(): bool
         {
@@ -256,7 +248,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setActive(bool $active): Shop
         {

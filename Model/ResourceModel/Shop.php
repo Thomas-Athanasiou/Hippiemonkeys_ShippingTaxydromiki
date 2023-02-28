@@ -14,7 +14,7 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel;
 
-    use Hippiemonkeys\Core\Model\ResourceModel\AbstractTableResource as AbstractResource,
+    use Hippiemonkeys\Core\Model\ResourceModel\AbstractResource,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterface,
         Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface;
 
@@ -22,29 +22,39 @@
     extends AbstractResource
     implements ShopResourceInterface
     {
+        protected const
+            TABLE_MAIN = 'hippiemonkeys_shippingtaxydromiki_shop';
+
         /**
-         * @inheritdoc
+         * {{@inheritdoc}}
+         */
+        protected function _construct()
+        {
+            $this->_init(static::TABLE_MAIN, static::FIELD_ID);
+        }
+
+        /**
+         * {@inheritdoc}
          */
         public function saveShop(ShopInterface $shop): ShopResourceInterface
         {
-            return $this->save($shop);
+            return $this->saveModel($shop);
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function loadShopById(ShopInterface $shop, $id): ShopResourceInterface
         {
-            return $this->load($shop, $id, static::FIELD_ID);
+            return $this->loadModel($shop, $id, static::FIELD_ID);
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function deleteShop(ShopInterface $shop): bool
         {
-            $this->delete($shop);
-            return $shop->isDeleted();
+            return $this->deleteModel($shop);
         }
     }
 ?>

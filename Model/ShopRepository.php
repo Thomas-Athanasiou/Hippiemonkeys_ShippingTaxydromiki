@@ -60,18 +60,18 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          *
          * @throws \Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException
          */
         public function getById($id) : ShopInterface
         {
             $shop = $this->_idCache[$id] ?? null;
-            if(!$shop)
+            if($shop === null)
             {
                 $shop = $this->getShopFactory()->create();
                 $this->getShopResource()->loadShopById($shop, $id);
-                if (!$shop->getId())
+                if ($shop->getId() === null)
                 {
                     throw new NoSuchEntityException(
                         __('The Shop with ID "%1" that was requested doesn\'t exist. Verify the Shop and try again.', $id)
@@ -83,7 +83,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getList(SearchCriteriaInterface $searchCriteria): ShopSearchResultInterface
         {
@@ -94,23 +94,22 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function save(ShopInterface $shop) : ShopInterface
         {
             $this->getShopResource()->saveShop($shop);
-            $this->_idCache[ $shop->getId() ] = $shop;
+            $this->_idCache[$shop->getId()] = $shop;
             return $shop;
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function delete(ShopInterface $shop) : bool
         {
-            $this->getShopResource()->deleteShop($shop);
-            unset($this->_idCache[ $shop->getId() ]);
-            return $shop->isDeleted();
+            unset($this->_idCache[$shop->getId()]);
+            return $this->getShopResource()->deleteShop($shop);
         }
 
         /**
@@ -181,7 +180,7 @@
          *
          * @access private
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\SearchResultInterfaceFactory
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterfaceFactory
          */
         private $_searchResultFactory;
 
@@ -190,7 +189,7 @@
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\SearchResultInterfaceFactory
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterfaceFactory
          */
         protected function getSearchResultFactory(): SearchResultInterfaceFactory
         {

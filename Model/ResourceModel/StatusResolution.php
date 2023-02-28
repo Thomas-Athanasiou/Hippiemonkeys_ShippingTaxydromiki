@@ -15,18 +15,18 @@
     namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel;
 
     use Hippiemonkeys\Core\Model\ResourceModel\AbstractResource,
-        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface;
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\StatusResolutionInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\StatusResolutionResourceInterface;
 
-    class Job
+    class StatusResolution
     extends AbstractResource
-    implements JobResourceInterface
+    implements StatusResolutionResourceInterface
     {
         protected const
-            TABLE_MAIN = 'hippiemonkeys_shippingtaxydromiki_job';
+            TABLE_MAIN = 'hippiemonkeys_shippingtaxydromiki_statusresolution';
 
         /**
-         * {{@inheritdoc}}
+         * {@inheritdoc}
          */
         protected function _construct()
         {
@@ -36,41 +36,33 @@
         /**
          * {@inheritdoc}
          */
-        public function saveJob(JobInterface $job): JobResourceInterface
+        public function saveStatusResolution(StatusResolutionInterface $statusResolution): StatusResolution
         {
-            return $this->saveModel($job);
+            return $this->saveModel($statusResolution);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function loadJobById(JobInterface $job, $id): JobResourceInterface
+        public function loadStatusResolutionById(StatusResolutionInterface $statusResolution, $id): StatusResolution
         {
-            return $this->loadModelById($job, $id);
+            return $this->loadModelById($statusResolution, $id);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function loadJobByJobId(JobInterface $job, int $jobId): JobResourceInterface
+        public function loadStatusResolutionByCode(StatusResolutionInterface $statusResolution, string $code): StatusResolution
         {
-            return $this->loadModel($job, $jobId, static::FIELD_JOB_ID);
+            return $this->loadModel($statusResolution, $code, static::FIELD_CODE);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function loadJobByVoucher(JobInterface $job, string $voucher): JobResourceInterface
+        public function deleteStatusResolution(StatusResolutionInterface $statusResolution): bool
         {
-            return $this->loadModel($job, $voucher, static::FIELD_VOUCHER);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-        public function deleteJob(JobInterface $job): bool
-        {
-            return $this->deleteJob($job);
+            return $this->deleteModel($statusResolution);
         }
     }
 ?>

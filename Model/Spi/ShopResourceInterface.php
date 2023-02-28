@@ -24,20 +24,20 @@
     extends ModelResourceInterface
     {
         const
-            FIELD_CODE          = 'code',
-            FIELD_CODE2         = 'code2',
-            FIELD_NAME          = 'name',
-            FIELD_STATE         = 'state',
-            FIELD_CITY          = 'city',
-            FIELD_ADDRESS       = 'address',
-            FIELD_TELEPHONE     = 'telephone',
-            FIELD_COUNTRY       = 'country',
-            FIELD_ZIP           = 'zip',
-            FIELD_EMAIL         = 'email',
-            FIELD_LONGITUDE     = 'longitude',
-            FIELD_LATITUDE      = 'latitude',
-            FIELD_SUBSHOP       = 'subshop',
-            FIELD_ACTIVE        = 'active';
+            FIELD_CODE = 'code',
+            FIELD_CODE2 = 'code2',
+            FIELD_NAME = 'name',
+            FIELD_STATE = 'state',
+            FIELD_CITY = 'city',
+            FIELD_ADDRESS = 'address',
+            FIELD_TELEPHONE = 'telephone',
+            FIELD_COUNTRY = 'country',
+            FIELD_ZIP = 'zip',
+            FIELD_EMAIL = 'email',
+            FIELD_LONGITUDE = 'longitude',
+            FIELD_LATITUDE = 'latitude',
+            FIELD_SUBSHOP = 'subshop',
+            FIELD_ACTIVE = 'active';
 
         /**
          * Save Shop data

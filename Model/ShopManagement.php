@@ -15,10 +15,11 @@
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
     use Magento\Framework\Api\SearchCriteriaBuilderFactory,
-        Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory,
+        Hippiemonkeys\ShippingTaxydromiki\Exception\ServiceException,
         Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop as ResourceModel;
 
     class ShopManagement
@@ -33,13 +34,13 @@
          *
          * @access public
          *
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface $carrier
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopInterfaceFactory $shopFactory
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface $shopRepository
          * @param \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
          */
         public function __construct(
-            CarrierInterface $carrier,
+            TaxydromikiInterface $carrier,
             ShopInterfaceFactory $shopFactory,
             ShopRepositoryInterface $shopRepository,
             SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
@@ -118,27 +119,27 @@
             $searchCriteriaBuilder->setPageSize( self::SHOP_SEARCH_PAGE_SIZE );
 
             $shopRepository = $this->getShopRepository();
-            foreach($shopRepository->getList( $searchCriteriaBuilder->create() )->getItems() as $shop)
+            foreach($shopRepository->getList($searchCriteriaBuilder->create())->getItems() as $shop)
             {
                 $found = false;
 
-                $shopCode       = $shop->getCode();
-                $shopCode2      = $shop->getCode2();
-                $shopName       = $shop->getName();
-                $shopCountry    = $shop->getCountry();
-                $shopState      = $shop->getState();
-                $shopCity       = $shop->getCity();
-                $shopAddress    = $shop->getAddress();
+                $shopCode = $shop->getCode();
+                $shopCode2 = $shop->getCode2();
+                $shopName = $shop->getName();
+                $shopCountry = $shop->getCountry();
+                $shopState = $shop->getState();
+                $shopCity = $shop->getCity();
+                $shopAddress = $shop->getAddress();
                 foreach($soapShops as $soapShop)
                 {
                     if(
-                        $soapShop->Code         === $shopCode
-                        && $soapShop->Code2     === $shopCode2
-                        && $soapShop->Name      === $shopName
-                        && $soapShop->Country   === $shopCountry
-                        && $soapShop->State     === $shopState
-                        && $soapShop->City      === $shopCity
-                        && $soapShop->Address   === $shopAddress
+                        $soapShop->Code === $shopCode
+                        && $soapShop->Code2 === $shopCode2
+                        && $soapShop->Name === $shopName
+                        && $soapShop->Country === $shopCountry
+                        && $soapShop->State === $shopState
+                        && $soapShop->City === $shopCity
+                        && $soapShop->Address === $shopAddress
                     )
                     {
                         $found = true;
@@ -159,9 +160,9 @@
          */
         public function updateShops(): void
         {
-            $getShopsListResult = $this->getCarrier()->getShopsList()->GetShopsListResult;
-            $resultCode = $getShopsListResult->Result ?? CarrierInterface::RESULT_CODE_INVALID;
-            if($resultCode === CarrierInterface::RESULT_CODE_SUCCESS)
+            $getShopsListResult = $this->getTaxydromiki()->getShopsList()->GetShopsListResult;
+            $resultCode = $getShopsListResult->Result ?? TaxydromikiInterface::RESULT_CODE_INVALID;
+            if($resultCode === TaxydromikiInterface::RESULT_CODE_SUCCESS)
             {
                 $soapShops = $getShopsListResult->Shops->Shop ?? [];
                 $this->saveShops($soapShops);
@@ -239,22 +240,22 @@
         }
 
         /**
-         * Carrier property
+         * Taxydromiki property
          *
          * @access private
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $_carrier
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface $_carrier
          */
         private $_carrier;
 
         /**
-         * Gets Carrier
+         * Gets Taxydromiki
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface
          */
-        protected function getCarrier(): CarrierInterface
+        protected function getTaxydromiki(): TaxydromikiInterface
         {
             return $this->_carrier;
         }

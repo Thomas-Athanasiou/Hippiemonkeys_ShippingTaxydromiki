@@ -19,29 +19,6 @@
     interface JobInterface
     extends ModelInterface
     {
-        const
-            STATUS_NONE = 0,
-            STATUS_NEW = 1,
-            STATUS_PENDING = 2,
-            STATUS_INTRANSIT = 3,
-            STATUS_INSHOP = 4,
-            STATUS_INTRANSITCOURIERCHARGE = 5,
-            STATUS_DELIVERED = 6,
-            STATUS_DELIVERYFAILURE = 7,
-            STATUS_RETURNED = 8;
-
-        /**
-         * Sets Id
-         *
-         * @api
-         * @access public
-         *
-         * @param mixed $id
-         *
-         * @return \this
-         */
-        function setId($id);
-
         /**
          * Gets Job Id
          *
@@ -60,7 +37,7 @@
          *
          * @param int $jobId
          *
-         * @return \this
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
          */
         function setJobId(int $jobId): JobInterface;
 
@@ -82,7 +59,7 @@
          *
          * @param string $voucher
          *
-         * @return \this
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
          */
         function setVoucher(string $voucher): JobInterface;
 
@@ -104,7 +81,7 @@
          *
          * @param bool $canceled
          *
-         * @return \this
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
          */
         function setCanceled(bool $canceled): JobInterface;
 
@@ -126,30 +103,8 @@
          *
          * @param bool $closed
          *
-         * @return \this
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface
          */
         function setClosed(bool $closed): JobInterface;
-
-        /**
-         * Gets Status
-         *
-         * @api
-         * @access public
-         *
-         * @return int
-         */
-        function getStatus() : int;
-
-        /**
-         * Sets Status
-         *
-         * @api
-         * @access public
-         *
-         * @param int $status
-         *
-         * @return \this
-         */
-        function setStatus(int $status): JobInterface;
     }
 ?>

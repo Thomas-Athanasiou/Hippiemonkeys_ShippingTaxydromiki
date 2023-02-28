@@ -14,21 +14,22 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
-    use Magento\Framework\DataObject;
+    use Magento\Framework\DataObject,
+        Magento\Quote\Model\Quote\Address\RateRequest;
 
     class Carrier
     extends AbstractCarrier
     {
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
-        public function collectRates($request)
+        public function collectRates(RateRequest $request)
         {
             return false;
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getAllowedMethods(): array
         {
@@ -36,11 +37,11 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         protected function doCreateJobRequest(DataObject $request): object
         {
-           new \stdClass;
+           return new \stdClass;
         }
     }
 ?>

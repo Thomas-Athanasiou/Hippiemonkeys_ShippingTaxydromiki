@@ -16,18 +16,19 @@
 
     use Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterface as SearchResultInterface,
         Hippiemonkeys\ShippingTaxydromiki\Model\Shop as Model,
-        Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Collection\AbstractCollection;
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\ShopResourceInterface as ResourceInterface,
+        Hippiemonkeys\Core\Model\ResourceModel\Collection\AbstractCollection;
 
     class Collection
     extends AbstractCollection
     implements SearchResultInterface
     {
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         protected function _construct()
         {
-            $this->setModel(Model::class);
+            $this->_init(Model::class, ResourceInterface::class);
         }
     }
 ?>

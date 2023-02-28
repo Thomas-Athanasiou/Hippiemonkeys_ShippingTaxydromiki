@@ -12,11 +12,11 @@
 
     declare(strict_types=1);
 
-    namespace Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier;
+    namespace Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Job;
 
     use Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\OptionArray;
 
-    class SoapLanguage
+    class JobStatus
     extends OptionArray
     {
 

@@ -16,6 +16,8 @@
                 <active>1</active>
                 <wsdl_url>https://voucher.taxydromiki.gr/JobServicesV2.asmx?WSDL</wsdl_url>
                 <title>Taxydromiki</title>
+                <track_active>1</track_active>
+                <track_summary_format>%1 at %2</track_summary_format>
                 <zip_code_check>1</zip_code_check>
                 <sallowspecific>0</sallowspecific>
                 <showmethod>1</showmethod>
@@ -31,6 +33,7 @@
                 <soap_mode>0</soap_mode>
                 <soap_language>el</soap_language>
                 <model>Hippiemonkeys\ShippingTaxydromiki\Model\Carrier</model>
+                <default_history_status_id></default_history_status_id>
             </hippiemonkeysshippingtaxydromiki>
         </carriers>
     </default>

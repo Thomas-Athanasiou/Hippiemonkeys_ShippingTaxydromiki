@@ -23,15 +23,7 @@
     implements JobInterface
     {
         /**
-         * @inheritdoc
-         */
-        public function getId()
-        {
-            return $this->getData(JobResourceInterface::FIELD_ID);
-        }
-
-        /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setId($id)
         {
@@ -39,7 +31,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getJobId(): int
         {
@@ -47,7 +39,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setJobId(int $jobId): Job
         {
@@ -55,7 +47,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getVoucher(): string
         {
@@ -63,7 +55,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setVoucher(string $voucher): Job
         {
@@ -71,7 +63,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getCanceled(): bool
         {
@@ -79,7 +71,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setCanceled(bool $canceled): Job
         {
@@ -87,7 +79,7 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function getClosed(): bool
         {
@@ -95,27 +87,11 @@
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function setClosed(bool $closed): Job
         {
             return $this->setData(JobResourceInterface::FIELD_CLOSED, (string) $closed);
-        }
-
-        /**
-         * @inheritdoc
-         */
-        function getStatus() : int
-        {
-            return (int) $this->getData(JobResourceInterface::FIELD_STATUS);
-        }
-
-        /**
-         * @inheritdoc
-         */
-        function setStatus(int $status): JobInterface
-        {
-            return $this->setData(JobResourceInterface::FIELD_STATUS, (string) $status);
         }
     }
 ?>

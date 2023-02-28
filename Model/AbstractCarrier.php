@@ -14,29 +14,39 @@
 
     namespace Hippiemonkeys\ShippingTaxydromiki\Model;
 
-    use SoapClient as Client,
-        Psr\Log\LoggerInterface,
+    use  Psr\Log\LoggerInterface,
         Magento\Framework\DataObject,
         Magento\Framework\DataObjectFactory,
+        Magento\Framework\Api\SearchCriteriaBuilder,
         Magento\Framework\App\Config\ScopeConfigInterface,
-        Magento\Framework\Webapi\Soap\ClientFactory,
         Magento\Directory\Helper\Data as DirectoryData,
+        Magento\Directory\Api\CountryInformationAcquirerInterface,
         Magento\CatalogInventory\Api\StockRegistryInterface,
         Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateErrorFactory,
         Magento\Quote\Model\Quote\Address\RateResult\MethodFactory as RateMethodFactory,
+        Magento\Sales\Api\Data\ShipmentTrackInterface,
+        Magento\Sales\Api\ShipmentTrackRepositoryInterface,
         Magento\Shipping\Model\Rate\ResultFactory as RateResultFactory,
         Magento\Shipping\Model\Tracking\ResultFactory as TrackingResultFactory,
         Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackingErrorFactory,
         Magento\Shipping\Model\Tracking\Result\StatusFactory as TrackingStatusFactory,
-        Hippiemonkeys\Shipping\Model\AbstractCarrierOnline,
-        Hippiemonkeys\ShippingTaxydromiki\Exception\AuthenticateException,
+        Hippiemonkeys\ShippingTrack\Api\Data\StatusInterface,
+        Hippiemonkeys\ShippingTrack\Api\StatusRepositoryInterface,
+        Hippiemonkeys\ShippingTrack\Model\AbstractCarrier as ParentAbstractCarrier,
+        Hippiemonkeys\ShippingTrack\Api\Data\HistoryInterfaceFactory,
+        Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterface,
+        Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterfaceFactory,
+        Hippiemonkeys\ShippingTrack\Api\PickupLocationRepositoryInterface,
+        Hippiemonkeys\ShippingTrack\Exception\NoSuchEntityException as TrackNoSuchEntityException,
+        Hippiemonkeys\ShippingTaxydromiki\Exception\NoSuchEntityException,
         Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory;
+        Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory,
+        Hippiemonkeys\ShippingTaxydromiki\Api\StatusResolutionRepositoryInterface;
 
     abstract class AbstractCarrier
-    extends AbstractCarrierOnline
+    extends ParentAbstractCarrier
     implements CarrierInterface
     {
         /**
@@ -51,15 +61,17 @@
         abstract protected function doCreateJobRequest(DataObject $request): object;
 
         protected const
-            CODE                    = 'hippiemonkeysshippingtaxydromiki',
-
+            CODE = 'hippiemonkeysshippingtaxydromiki',
             DEFAULT_VOUCHER_NUMBER  = '',
-            DEFAULT_SUB_CODE        = '',
-            DEFAULT_BELONGS_TO      = '',
-            DEFAULT_DELIVER_TO      = '',
-            DEFAULT_RECEIVED_DATE   = '',
-
-            VOUCHER_TYPE            = 'Voucher';
+            DEFAULT_SUB_CODE = '',
+            DEFAULT_BELONGS_TO = '',
+            DEFAULT_DELIVER_TO = '',
+            DEFAULT_RECEIVED_DATE = '',
+            VOUCHER_TYPE = 'Voucher',
+            FORMAT_CREATED_AT = 'd/m/Y H:i:s',
+            FORMAT_CREATED_AT_SQL = 'Y-m-d H:i:s',
+            FORMAT_PICKUP_LOCATION_CODE = '%s:%s:%s:%s:%s:%s:%s',
+            CONF_DEFAULT_HISTORY_STATUS_ID = 'default_history_status_id';
 
         /**
          * Constructor
@@ -77,9 +89,16 @@
          * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackingStatusFactory
          * @param \Magento\Directory\Helper\Data $directoryData
          * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $jobFactory,
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface $jobRepository,
-         * @param \Magento\Framework\Webapi\Soap\ClientFactory $clientFactory,
+         * @param \Magento\Sales\Api\ShipmentTrackRepositoryInterface $shipmentTrackRepository
+         * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+         * @param \Hippiemonkeys\ShippingTrack\Api\Data\HistoryInterfaceFactory $historyFactory
+         * @param \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterfaceFactory $pickupLocationFactory
+         * @param \Hippiemonkeys\ShippingTrack\Api\PickupLocationRepositoryInterface $pickupLocationRepository
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface $taxydromiki
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $jobFactory
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface $jobRepository
+         * @param \Hippiemonkeys\ShippingTrack\Api\StatusRepositoryInterface $statusRepository
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\StatusResolutionRepositoryInterface $statusResolutionRepository
          * @param array $data
          */
         public function __construct(
@@ -94,9 +113,17 @@
             TrackingStatusFactory $trackingStatusFactory,
             DirectoryData $directoryData,
             StockRegistryInterface $stockRegistry,
+            ShipmentTrackRepositoryInterface $shipmentTrackRepository,
+            SearchCriteriaBuilder $searchCriteriaBuilder,
+            HistoryInterfaceFactory $historyFactory,
+            PickupLocationInterfaceFactory $pickupLocationFactory,
+            PickupLocationRepositoryInterface $pickupLocationRepository,
+            CountryInformationAcquirerInterface $countryInformationAcquirer,
+            TaxydromikiInterface $taxydromiki,
             JobInterfaceFactory $jobFactory,
             JobRepositoryInterface $jobRepository,
-            ClientFactory $clientFactory,
+            StatusRepositoryInterface $statusRepository,
+            StatusResolutionRepositoryInterface $statusResolutionRepository,
             array $data = []
         )
         {
@@ -112,239 +139,226 @@
                 $trackingStatusFactory,
                 $directoryData,
                 $stockRegistry,
+                $shipmentTrackRepository,
+                $searchCriteriaBuilder,
                 $data
             );
-            $this->_jobFactory      = $jobFactory;
-            $this->_jobRepository   = $jobRepository;
-            $this->_clientFactory   = $clientFactory;
+
+            $this->_historyFactory = $historyFactory;
+            $this->_pickupLocationFactory = $pickupLocationFactory;
+            $this->_pickupLocationRepository = $pickupLocationRepository;
+            $this->_countryInformationAcquirer = $countryInformationAcquirer;
+            $this->_taxydromiki = $taxydromiki;
+            $this->_jobFactory = $jobFactory;
+            $this->_jobRepository = $jobRepository;
+            $this->_statusRepository = $statusRepository;
+            $this->_statusResolutionRepository = $statusResolutionRepository;
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
-        public function getTracking($trackings)
+        public function getShipmentTrackHistories(ShipmentTrackInterface $shipmentTrack): array
         {
-            $result         = $this->getTrackingResultFactory()->create();
-            $carrierCode    = $this->getCarrierCode();
-            $carrierTitle   = $this->getCarrierTitle();
-            foreach((array) $trackings as $tracking)
+            $histories = [];
+
+            $logger = $this->getLogger();
+            $historyFactory = $this->getHistoryFactory();
+
+            $trackAndTraceResult = $this->getTaxydromiki()->trackAndTrace($shipmentTrack->getTrackNumber(), $this->getSoapLanguage())->TrackAndTraceResult ?? null;
+            if($trackAndTraceResult !== null && $this->getIsSuccessResult($trackAndTraceResult))
             {
-                $trackAndTraceResult = $this->trackAndTrace($tracking, $this->getSoapLanguage())->TrackAndTraceResult ?? null;
-                if($trackAndTraceResult && ($trackAndTraceResult->Result ?? static::RESULT_CODE_INVALID) === static::RESULT_CODE_SUCCESS)
+                $checkpoints = $trackAndTraceResult->Checkpoints ?? [];
+                if(isset($checkpoints->Checkpoint) && is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint))
                 {
-                    $trackSummary 	= [];
-                    $checkpoints 	= $trackAndTraceResult->Checkpoints;
-                    if(is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint))
-                    {
-                        $checkpoints = $checkpoints->Checkpoint;
-                    }
+                    $checkpoints = $checkpoints->Checkpoint;
+                }
 
-                    foreach((array) $checkpoints as $checkpoint)
+                $statusResolutionRepository = $this->getStatusResolutionRepository();
+                foreach(\array_values((array) $checkpoints) as $workflowPosition => $checkpoint)
+                {
+                    $checkpointStatus = $checkpoint->Status ?? '';
+                    if($checkpointStatus !== '')
                     {
-                        $trackSummary[] = __('%1 - %2 at %3', $checkpoint->Shop ?? '', $checkpoint->Status ?? '', date('d/m/Y, H:i', \strtotime($checkpoint->StatusDate)) ?? date('d/m/Y, H:i'));
-                    }
+                        try
+                        {
+                            /* $soapShop = $checkpoint->Shop ?? null; */
+                            $soapShop = null;
 
-                    $trackStatus = $this->getTrackingStatusFactory()->create();
-                    $trackStatus->setCarrier($carrierCode);
-                    $trackStatus->setCarrierTitle($carrierTitle);
-                    $trackStatus->setTrackSummary(implode(' → ', $trackSummary));
-                    $trackStatus->setTracking($tracking);
-                    $result->append($trackStatus);
+                            $history = $historyFactory->create();
+                            $history->setShipmentTrack($shipmentTrack);
+                            $history->setStatus($statusResolutionRepository->getByCode($checkpointStatus)->getStatus());
+                            $history->setPickupLocation(($soapShop === null || $soapShop === '') ? null : $this->getPickupLocationBySoapShop($soapShop));
+                            $history->setCreatedAt(date(static::FORMAT_CREATED_AT_SQL, \strtotime($checkpoint->StatusDate)) ?? date(static::FORMAT_CREATED_AT_SQL));
+                            $history->setWorkflowPosition((int) $workflowPosition);
+
+                            $histories[] = $history;
+                        }
+                        catch (NoSuchEntityException)
+                        {
+                            $logger->error(__('Unable to process history item with Status Code %1', $checkpointStatus));
+                        }
+                        catch (TrackNoSuchEntityException)
+                        {
+                            $logger->error(__('Unable to process history item details with Status Code %1', $checkpointStatus));
+                        }
+                    }
                 }
             }
-            return $result;
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function closePendingJobs(): object
-        {
-            return $this->getClient()->ClosePendingJobs(
-                ['sAuthKey' => $this->getAuthenticateKey()]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function closePendingJobsByDate(string $dateFrom, string $dateTo): object
-        {
-            return $this->getClient()->ClosePendingJobsByDate(
-                ['sAuthKey' => $this->getAuthenticateKey(), 'dFr' => $dateFrom, 'dTo' => $dateTo]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function cancelJob(int $jobId, bool $cancel): object
-        {
-            return $this->getClient()->CancelJob(
-                ['sAuthKey' => $this->getAuthenticateKey(), 'nJobId' => $jobId, 'bCancel' => $cancel]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function getVoucherJob(int $jobId): object
-        {
-            return $this->getClient()->GetVoucherJob(
-                ['sAuthKey' => $this->getAuthenticateKey(), 'nJobId' => $jobId]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function getJobsFromOrderId(string $orderId): object
-        {
-            return $this->getClient()->GetJobsFromOrderId(
-                ['sAuthKey' => $this->getAuthenticateKey(), 'sOrderId' => $orderId]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function getVouchersPdf(array $vouchers) : object
-        {
-            $client = $this->getClient();
-            $content = static::RESULT_CODE_INVALID;
-
-            try
+            else
             {
-                $content = $client->GetVouchersPdf(
-                    [
-                        'authKey' => $this->getAuthenticateKey(),
-                        'format' => $this->getPdfFormat(),
-                        'extraInfoFormat' => $this->getPdfExtraInfoFormat(),
-                        'voucherNumbers' => $vouchers
-                    ]
-                );
-            }
-            catch(\SoapFault $soapFault)
-            {
-                $content = $client->__getLastResponse();
+                $logger->error(__('Unable to process history, taxydromiki service responded with error: %1', $trackAndTraceResult->Result ?? 0));
+
+                try
+                {
+                    $history = $historyFactory->create();
+                    $history->setShipmentTrack($shipmentTrack);
+                    $history->setStatus($this->getDefaultHistoryStatus());
+                    $history->setPickupLocation(null);
+                    $history->setCreatedAt(date(static::FORMAT_CREATED_AT_SQL));
+                    $history->setWorkflowPosition(2048);
+                    $histories[] = $history;
+                }
+                catch (TrackNoSuchEntityException)
+                {
+                    $logger->error(__('Invalid Default History Status Id'));
+                }
             }
 
-            $getVouchersPdfResult = new \stdClass;
-            $getVouchersPdfResult->Result = is_numeric($content) ? (int) $content : static::RESULT_CODE_SUCCESS;
-            $getVouchersPdfResult->Content = $content;
-
-            $result = new \stdClass;
-            $result->GetVouchersPdfResult = $getVouchersPdfResult;
-            return $result;
+            return $histories;
         }
 
         /**
-         * @inheritdoc
-         */
-        public function getShopsList(): object
-        {
-            return $this->getClient()->GetShopsList(
-                ['authKey' => $this->getAuthenticateKey()]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function trackAndTrace(string $voucher, string $language): object
-        {
-            return $this->getClient()->TrackAndTrace(
-                ['authKey' => $this->getAuthenticateKey(), 'voucherNo' => $voucher, 'language' => $language]
-            );
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function trackDeliveryStatus(string $voucher, string $language): object
-        {
-            return $this->getClient()->TrackDeliveryStatus(
-                ['authKey' => $this->getAuthenticateKey(), 'voucherNo' => $voucher, 'language' => $language]
-            );
-        }
-
-        /**
-         * Sends an Authenticate request to Taxydromiki service
+         * Gets Unique Pickup location by the given name, if there are more than one pickup locations returns null
          *
          * @access protected
          *
-         * @return object
+         * @param string $name
          */
-        protected function authenticate(): object
+        protected function getUniquePickupLocationByNameOrNull(string $name): ?PickupLocationInterface
         {
-            return $this->getClient()->Authenticate(
-                ['sUsrName' => $this->getUsername(), 'sUsrPwd' => $this->getPassword(), 'applicationKey' => $this->getApplicationKey()]
+            return null;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getPickupLocations(): array
+        {
+            /**
+             * @var \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterface[] $pickupLocations
+             */
+            $pickupLocations = [];
+
+            $getShopsListResult = $this->getTaxydromiki()->getShopsList()->GetShopsListResult;
+            if($this->getIsSuccessResult($getShopsListResult))
+            {
+                foreach((array) $getShopsListResult->Shops->Shop ?? [] as $soapShop)
+                {
+                    $pickupLocation = $this->getUpdatedPickupLocation($soapShop);
+                    if($pickupLocation !== null)
+                    {
+                        $pickupLocations[] = $pickupLocation;
+                    }
+                }
+            }
+
+            return $pickupLocations;
+        }
+
+        /**
+         * Gets Updated Pickup Location
+         *
+         * @param object $soapShop
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterface|null
+         */
+        protected function getUpdatedPickupLocation(object $soapShop): PickupLocationInterface
+        {
+            $pickupLocation = null;
+            try
+            {
+                $pickupLocation = $this->getPickupLocationBySoapShop($soapShop);
+            }
+            catch (TrackNoSuchEntityException)
+            {
+                $pickupLocation = $this->getPickupLocationFactory()->create();
+                $pickupLocation->setCarrierCode($this->getCarrierCode());
+            }
+
+            if($pickupLocation !== null)
+            {
+                $pickupLocation->setCode($this->getSoapShopCode($soapShop))
+                    ->setName($soapShop->Name)
+                    ->setState($soapShop->State)
+                    ->setCity($soapShop->City)
+                    ->setCountryInformation($this->getCountryInformationAcquirer()->getCountryInfo($soapShop->Country))
+                    ->setAddress($soapShop->Address)
+                    ->setTelephone($soapShop->Telephone)
+                    ->setPostalCode($soapShop->Zip)
+                    ->setEmail($soapShop->Email)
+                    ->setLongitude((float) ($soapShop->Longitude))
+                    ->setLatitude((float) ($soapShop->Latitude));
+            }
+
+            return $pickupLocation;
+        }
+
+        protected function getDefaultHistoryStatus(): StatusInterface
+        {
+            return $this->getStatusRepository()->getById(
+                $this->getConfigData(static::CONF_DEFAULT_HISTORY_STATUS_ID)
             );
         }
 
         /**
-         * @inheritdoc
+         * Gets Pickup Location by Soap Shop
+         *
+         * @access protected
+         *
+         * @param object $soapShop
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterface
          */
-        public function createJob(
-            string $orderId,
-            string $name,
-            string $address,
-            string $city,
-            string $telephone,
-            string $zip,
-            string $destination,
-            string $courier,
-            int $pieces,
-            float $weight,
-            array $comments,
-            array $services,
-            float $codAmount,
-            float $insAmoubnt,
-            string $voucherNumber,
-            string $subCode,
-            string $belongsTo,
-            string $deliverTo,
-            string $receivedDate
-        ): object
+        protected function getPickupLocationBySoapShop(object $soapShop): PickupLocationInterface
         {
-            return $this->getClient()->CreateJob(
-                [
-                    'sAuthKey' => $this->getAuthenticateKey(),
-                    'oVoucher' => [
-                        'OrderId'       => $orderId,
-                        'Name'          => \mb_strtoupper($name),
-                        'Address'       => $address,
-                        'City'          => $city,
-                        'Telephone'     => $telephone,
-                        'Zip'           => \str_replace(' ', '', $zip),
-                        'Destination'   => $destination,
-                        'Courier'       => $courier,
-                        'Pieces'        => $pieces,
-                        'Weight'        => $weight,
-                        'Comments'      => \implode(', ', $comments),
-                        'Services'      => \implode(',', $services),
-                        'CodAmount'     => $codAmount,
-                        'InsAmount'     => $insAmoubnt,
-                        'VoucherNumber' => static::DEFAULT_VOUCHER_NUMBER,
-                        'SubCode'       => static::DEFAULT_SUB_CODE,
-                        'BelongsTo'     => static::DEFAULT_BELONGS_TO,
-                        'DeliverTo'     => static::DEFAULT_DELIVER_TO,
-                        'ReceivedDate'  => \date('Y-m-d')
-                    ],
-                    'eType' => static::VOUCHER_TYPE
-                ]
+            return $this->getPickupLocationRepository()->getByCodeAndTracker($this->getSoapShopCode($soapShop), $this);
+        }
+
+        /**
+         * Gets Soap Shop Code
+         *
+         * @access protected
+         *
+         * @param object $soapShop
+         *
+         * @return string
+         */
+        protected function getSoapShopCode(object $soapShop): string
+        {
+            return \md5(
+                \sprintf(
+                    static::FORMAT_PICKUP_LOCATION_CODE,
+                    $soapShop->Code ?? '',
+                    $soapShop->Code2 ?? '',
+                    $soapShop->Name ?? '',
+                    $soapShop->Country ?? '',
+                    $soapShop->State ?? '',
+                    $soapShop->City ?? '',
+                    $soapShop->Address ?? ''
+                ),
+                false
             );
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         protected function processShipmentRequest(DataObject $request): DataObject
         {
             $result = $this->getDataObjectFactory()->create();
             $createJobResult = $this->doCreateJobRequest($request)->CreateJobResult;
-            $createJobResultCode = $createJobResult->Result ?? static::RESULT_CODE_INVALID;
-            if($createJobResultCode === static::RESULT_CODE_SUCCESS)
+            if($this->getIsSuccessResult($createJobResult))
             {
                 $voucher = $createJobResult->Voucher;
 
@@ -353,215 +367,61 @@
                 $job->setVoucher($voucher);
                 $job->setCanceled(false);
                 $job->setClosed(false);
-                $job->setStatus(JobInterface::STATUS_NEW);
 
                 $this->getJobRepository()->save($job);
 
                 $result->setTrackingNumber($voucher);
 
-                $labelResult = $this->getVouchersPdf( [$voucher] )->GetVouchersPdfResult ?? null;
-                if($labelResult && ($labelResult->Result ?? static::RESULT_CODE_INVALID) === static::RESULT_CODE_SUCCESS)
+                $labelResult = $this->getTaxydromiki()->getVouchersPdf([$voucher])->GetVouchersPdfResult ?? null;
+                if($labelResult && $this->getIsSuccessResult($labelResult))
                 {
-                    $result->setShippingLabelContent( $labelResult->Content );
+                    $result->setShippingLabelContent($labelResult->Content);
                 }
             }
             else
             {
-                $result->setHasErrors($hasErrors);
-                $result->setErrors( __('There has been an error with this shipment Request, Error Code: %1', $createJobResultCode) );
+                $result->setHasErrors(true);
+                $result->setErrors(
+                    __(
+                        'There has been an error with this shipment Request, Error Code: %1',
+                        $createJobResult->Result ?? TaxydromikiInterface::RESULT_CODE_INVALID
+                    )
+                );
             }
             return $result;
         }
 
         /**
-         * Soap Client property
+         * Gets wether the result represents a successful response
+         *
+         * @access protected
+         *
+         * @return bool
+         */
+        protected function getIsSuccessResult(object $result): bool
+        {
+            return ($result->Result ?? TaxydromikiInterface::RESULT_CODE_INVALID) === TaxydromikiInterface::RESULT_CODE_SUCCESS;
+        }
+
+        /**
+         * Taxydromiki property
          *
          * @access private
          *
-         * @var string $_authenticateKey
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface $_taxydromiki
          */
-        private $_authenticateKey;
+        private $_taxydromiki;
 
         /**
-         * Gets Session Token
+         * Gets Taxydromiki
          *
          * @access protected
          *
-         * @return string
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface
          */
-        protected function getAuthenticateKey() : string
+        protected function getTaxydromiki(): TaxydromikiInterface
         {
-            $authenticateKey = $this->_authenticateKey;
-            if(!$authenticateKey)
-            {
-                $authenticateResult = $this->authenticate()->AuthenticateResult ?? null;
-                if($authenticateResult && ($authenticateResult->Result ?? static::RESULT_CODE_INVALID) !== static::RESULT_CODE_SUCCESS)
-                {
-                    throw new AuthenticateException( __('Authorization with taxydromiki service failed.') );
-                }
-                $authenticateKey = $authenticateResult->Key ?? '';
-                $this->setAuthenticateKey($authenticateKey);
-            }
-            return $authenticateKey;
-        }
-
-        /**
-         * Sets Authenticate Key
-         *
-         * @access protected
-         *
-         * @param string $authenticateKey
-         */
-        protected function setAuthenticateKey(string $authenticateKey): void
-        {
-            $this->_authenticateKey = $authenticateKey;
-        }
-
-        /**
-         * Client Factory Property
-         *
-         * @access private
-         *
-         * @var \Magento\Framework\Webapi\Soap\ClientFactory $_clientFactory
-         */
-        private $_clientFactory;
-
-        /**
-         * Gets Client Factory
-         *
-         * @access protected
-         *
-         * @return \Magento\Framework\Webapi\Soap\ClientFactory
-         */
-        protected function getClientFactory(): ClientFactory
-        {
-            return $this->_clientFactory;
-        }
-
-        /**
-         * Client property
-         *
-         * @access private
-         *
-         * @var \SoapClient $_client
-         */
-        private $_client;
-
-        /**
-         * Gets Client
-         *
-         * @access protected
-         *
-         * @return \SoapClient
-         */
-        protected function getClient() : Client
-        {
-            $client = $this->_client;
-            if(!$client)
-            {
-                $client = $this->getClientFactory()->create(
-                    $this->getWsdlUrl(),
-                    ['cache_wsdl' => \WSDL_CACHE_BOTH, 'trace' => true]
-                );
-                $this->setClient($client);
-            }
-            return $client;
-        }
-
-        /**
-         * Sets Client
-         *
-         * @access protected
-         *
-         * @param \SoapClient $client
-         */
-        protected function setClient(Client $client) : void
-        {
-            $this->_client = $client;
-        }
-
-        /**
-         * Gets Wsdl Url
-         *
-         * @access protected
-         *
-         * @return string
-         */
-        protected function getWsdlUrl(): string
-        {
-            return $this->getConfigData('wsdl_url');
-        }
-
-        /**
-         * Gets Pdf Format
-         *
-         * @access protected
-         *
-         * @return string
-         */
-        protected function getPdfFormat() : string
-        {
-            return $this->getConfigData('pdf_format');
-        }
-
-        /**
-         * Gets Pdf Extra Info Format
-         *
-         * @access protected
-         *
-         * @return string
-         */
-        protected function getPdfExtraInfoFormat() : string
-        {
-            return $this->getConfigData('pdf_extra_info_format');
-        }
-
-        /**
-         * Gets taxydromiki Username credential
-         *
-         * @access private
-         *
-         * @return string
-         */
-        private function getUsername(): string
-        {
-            return (string) $this->getConfigData('taxydromiki_username');
-        }
-
-        /**
-         * Gets taxydromiki Password credential
-         *
-         * @access private
-         *
-         * @return string
-         */
-        private function getPassword(): string
-        {
-            return (string) $this->getConfigData('taxydromiki_password');
-        }
-
-        /**
-         * Gets taxydromiki Application Key credential
-         *
-         * @access private
-         *
-         * @return string
-         */
-        private function getApplicationKey(): string
-        {
-            return (string) $this->getConfigData('taxydromiki_api_key');
-        }
-
-        /**
-         * Gets taxydromiki Application Key credential
-         *
-         * @access private
-         *
-         * @return string
-         */
-        private function getSoapLanguage(): string
-        {
-            return $this->getConfigData('soap_language');
+            return $this->_taxydromiki;
         }
 
         /**
@@ -569,7 +429,7 @@
          *
          * @access private
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterfaceFactory $_jobFactory
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory $_jobFactory
          */
         private $_jobFactory;
 
@@ -578,7 +438,7 @@
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterfaceFactory
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterfaceFactory
          */
         protected function getJobFactory() : JobInterfaceFactory
         {
@@ -604,6 +464,144 @@
         protected function getJobRepository() : JobRepositoryInterface
         {
             return $this->_jobRepository;
+        }
+
+        /**
+         * Status Resolution Repository property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\StatusResolutionRepositoryInterface $_statusResolutionRepository
+         */
+        private $_statusResolutionRepository;
+
+        /**
+         * Gets Status Resolution Repository
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\StatusResolutionRepositoryInterface
+         */
+        protected function getStatusResolutionRepository(): StatusResolutionRepositoryInterface
+        {
+            return $this->_statusResolutionRepository;
+        }
+
+        /**
+         * Status Repository property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTrack\Api\StatusRepositoryInterface $_statusRepository
+         */
+        private $_statusRepository;
+
+        /**
+         * Gets Status Repository
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\StatusRepositoryInterface
+         */
+        protected function getStatusRepository(): StatusRepositoryInterface
+        {
+            return $this->_statusRepository;
+        }
+
+        /**
+         * History Factory property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTrack\Api\Data\HistoryInterfaceFactory $_historyFactory
+         */
+        private $_historyFactory;
+
+        /**
+         * Gets History Factory
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\Data\HistoryInterfaceFactory
+         */
+        protected function getHistoryFactory(): HistoryInterfaceFactory
+        {
+            return $this->_historyFactory;
+        }
+
+        /**
+         * Pickup Location Factory property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterfaceFactory $_pickupLocationFactory
+         */
+        private $_pickupLocationFactory;
+
+        /**
+         * Gets Pickup Location Factory
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\Data\PickupLocationInterfaceFactory
+         */
+        protected function getPickupLocationFactory(): PickupLocationInterfaceFactory
+        {
+            return $this->_pickupLocationFactory;
+        }
+
+        /**
+         * Pickup Location Repository property
+         *
+         * @access private
+         *
+         * @var \Hippiemonkeys\ShippingTrack\Api\PickupLocationRepositoryInterface $_pickupLocationRepository
+         */
+        private $_pickupLocationRepository;
+
+        /**
+         * Gets Pickup Location Repository
+         *
+         * @access protected
+         *
+         * @return \Hippiemonkeys\ShippingTrack\Api\PickupLocationRepositoryInterface
+         */
+        protected function getPickupLocationRepository(): PickupLocationRepositoryInterface
+        {
+            return $this->_pickupLocationRepository;
+        }
+
+        /**
+         * Country Information Acquirer property
+         *
+         * @access private
+         *
+         * @var \Magento\Directory\Api\CountryInformationAcquirerInterface $_countryInformationAcquirer
+         */
+        private $_countryInformationAcquirer;
+
+        /**
+         * Gets Country Information Acquirer
+         *
+         * @access protected
+         *
+         * @return \Magento\Directory\Api\CountryInformationAcquirerInterface
+         */
+        protected function getCountryInformationAcquirer(): CountryInformationAcquirerInterface
+        {
+            return $this->_countryInformationAcquirer;
+        }
+
+        /**
+         * Gets taxydromiki Application Key credential
+         *
+         * @access private
+         *
+         * @return string
+         */
+        private function getSoapLanguage(): string
+        {
+            return $this->getConfigData('soap_language');
         }
     }
 ?>

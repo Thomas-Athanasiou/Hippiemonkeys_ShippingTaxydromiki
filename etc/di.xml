@@ -6,6 +6,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\Carrier" />
+    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\Taxydromiki" />
     <type name="Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier\PdfExtraInfoFormat">
         <arguments>
             <argument name="optionArray" xsi:type="array">
@@ -60,17 +61,30 @@
             <argument name="parentConfig" xsi:type="object">Hippiemonkeys\Shipping\Helper\Config\Section\Group\Taxydromiki</argument>
         </arguments>
     </virtualType>
-    <type name="Hippiemonkeys\ShippingTaxydromiki\Helper\Taxydromiki">
+    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\Taxydromiki">
         <arguments>
-            <argument name="config" xsi:type="object">Hippiemonkeys\Shipping\Helper\Config\Section\Group\Taxydromiki</argument>
+            <argument name="config" xsi:type="object">Hippiemonkeys\Shipping\Helper\Config\Section\Group\TaxydromikiCarrier</argument>
         </arguments>
     </type>
-    <virtualType name="Hippiemonkeys\ShippingTaxydromiki\Helper\Config\Section\Carrier" type="Hippiemonkeys\Core\Helper\Config\Section\Group">
+
+    <!-- Config -->
+
+    <type name="Hippiemonkeys\ShippingTrack\Model\Config\Source\HistoryTrackerCodes">
         <arguments>
-            <argument name="section" xsi:type="string">carriers</argument>
-            <argument name="group" xsi:type="string">hippiemonkeysshippingtaxydromiki</argument>
+            <argument name="optionArray" xsi:type="array">
+                <item name="hippiemonkeysshippingtaxydromiki" xsi:type="string">Geniki Taxydromiki</item>
+            </argument>
         </arguments>
-    </virtualType>
+    </type>
+
+    <!-- Tracker -->
+    <type name="Hippiemonkeys\ShippingTrack\Model\TrackerComposite">
+        <arguments>
+            <argument name="trackers" xsi:type="array">
+                <item name="hippiemonkeysshippingtaxydromiki" xsi:type="object">Hippiemonkeys\ShippingTaxydromiki\Model\Carrier</item>
+            </argument>
+        </arguments>
+    </type>
 
     <!-- Job -->
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\Job"/>
@@ -78,30 +92,9 @@
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\JobRepository" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\JobManagement" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job\Collection" />
-    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job">
-        <arguments>
-            <argument name="mainTableName" xsi:type="string">hippiemonkeys_shippingtaxydromiki_job</argument>
-        </arguments>
-    </type>
-    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job\Collection">
-        <arguments>
-            <argument name="resource" xsi:type="object">Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job</argument>
-        </arguments>
-    </type>
     <type name="Hippiemonkeys\ShippingTaxydromiki\Model\JobManagement">
         <arguments>
             <argument name="config" xsi:type="object">Hippiemonkeys\Shipping\Helper\Config\Section\Group\Taxydromiki</argument>
-            <argument name="statusMap" xsi:type="array">
-                <item name="Δημιουργία ετικέτας αποστολής" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_PENDING</item>
-                <item name="Αναχώρηση από σημείο εξυπηρέτησης" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_INTRANSIT</item>
-                <item name="Αναχώρηση από κέντρο διαμετακόμισης" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_INTRANSIT</item>
-                <item name="Άφιξη σε σημείο εξυπηρέτησης" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_INSHOP</item>
-                <item name="Καταχώρηση στοιχείων παράδοσης" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_INSHOP</item>
-                <item name="Χρέωση σε κούριερ" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_INTRANSITCOURIERCHARGE</item>
-                <item name="Αδυναμία παράδοσης" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_DELIVERYFAILURE</item>
-                <item name="Παράδοση αποστολής" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_DELIVERED</item>
-                <item name="Επιστροφή στον αρχικό αποστολέα" xsi:type="const">Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface::STATUS_RETURNED</item>
-            </argument>
         </arguments>
     </type>
 
@@ -111,14 +104,15 @@
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\ShopRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ShopRepository" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\ShopManagementInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ShopManagement" />
     <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\ShopSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop\Collection" />
-    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop">
+    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\ShopManagement">
         <arguments>
-            <argument name="mainTableName" xsi:type="string">hippiemonkeys_shippingtaxydromiki_shop</argument>
+            <argument name="config" xsi:type="object">Hippiemonkeys\Shipping\Helper\Config\Section\Group\Taxydromiki</argument>
         </arguments>
     </type>
-    <type name="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop\Collection">
-        <arguments>
-            <argument name="resource" xsi:type="object">Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Shop</argument>
-        </arguments>
-    </type>
+
+    <!-- Status Resolution -->
+    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\StatusResolutionInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\StatusResolution"/>
+    <preference for="Hippiemonkeys\ShippingTaxydromiki\Model\Spi\StatusResolutionResourceInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\StatusResolution"/>
+    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\StatusResolutionRepositoryInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\StatusResolutionRepository" />
+    <preference for="Hippiemonkeys\ShippingTaxydromiki\Api\Data\StatusResolutionSearchResultInterface" type="Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\StatusResolution\Collection" />
 </config>

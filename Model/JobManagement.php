@@ -15,10 +15,9 @@
     use Magento\Framework\Api\SearchCriteriaBuilder,
         Hippiemonkeys\Core\Api\Helper\ConfigInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface,
         Hippiemonkeys\ShippingTaxydromiki\Api\JobManagementInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface;
+        Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface;
 
     class JobManagement
     implements JobManagementInterface
@@ -29,41 +28,38 @@
          * @access public
          *
          * @param \Hippiemonkeys\Core\Api\Helper\ConfigInterface $config
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface $carrier
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface $taxydromiki
          * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobRepositoryInterface $jobRepository
          * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
          * @param string[] $statusMap
          */
         public function __construct(
             ConfigInterface $config,
-            CarrierInterface $carrier,
+            TaxydromikiInterface $taxydromiki,
             JobRepositoryInterface $jobRepository,
-            SearchCriteriaBuilder $searchCriteriaBuilder,
-            array $statusMap
+            SearchCriteriaBuilder $searchCriteriaBuilder
         )
         {
             $this->_config = $config;
-            $this->_carrier = $carrier;
+            $this->_taxydromiki = $taxydromiki;
             $this->_jobRepository = $jobRepository;
             $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
-            $this->_statusMap = $statusMap;
         }
 
         /**
-         * @inheritdoc
+         * {@inheritdoc}
          */
         public function processJob(JobInterface $job): void
         {
             $processJobFromGetVoucherJobResult = $this->processJobFromGetVoucherJob($job);
-            $processJobFromTrackAndTraceResult = $this->processJobFromTrackAndTrace($job);
-            if($processJobFromGetVoucherJobResult || $processJobFromTrackAndTraceResult)
+            if($processJobFromGetVoucherJobResult)
             {
                 $this->getJobRepository()->save($job);
             }
         }
 
         /**
-         * Updates persistent jobs from the external GetVoucherJob carrier service
+         * Updates persistent jobs from the external GetVoucherJob taxydromiki service
          *
          * @access private
          *
@@ -76,14 +72,14 @@
             $isCanceledUpdated = false;
             $isClosedUpdated = false;
 
-            $getVoucherJobResult = $this->getCarrier()->getVoucherJob($job->getJobId())->GetVoucherJobResult ?? null;
-            if(\is_object($getVoucherJobResult) && ($getVoucherJobResult->Result ?? CarrierInterface::RESULT_CODE_INVALID) === CarrierInterface::RESULT_CODE_SUCCESS)
+            $getVoucherJobResult = $this->getTaxydromiki()->getVoucherJob($job->getJobId())->GetVoucherJobResult ?? null;
+            if(\is_object($getVoucherJobResult) && ($getVoucherJobResult->Result ?? TaxydromikiInterface::RESULT_CODE_INVALID) === TaxydromikiInterface::RESULT_CODE_SUCCESS)
             {
-                $isCanceled = $getVoucherJobResult->IsCanceled ?? null;
-                $isClosed = $getVoucherJobResult->IsClosed ?? null;
+                $isCanceled = (bool) ($getVoucherJobResult->IsCanceled ?? false);
+                $isClosed = (bool) ($getVoucherJobResult->IsClosed ?? false);
 
-                $isCanceledUpdated = \is_bool($isCanceled) && $job->getCanceled() !== $isCanceled;
-                $isClosedUpdated = \is_bool($isClosed) && $job->getClosed() !== $isClosed;
+                $isCanceledUpdated = $job->getCanceled() !== $isCanceled;
+                $isClosedUpdated = $job->getClosed() !== $isClosed;
 
                 if($isCanceledUpdated)
                 {
@@ -99,57 +95,6 @@
         }
 
         /**
-         * Updates persistent jobs from the external TrackAndTrace carrier service
-         *
-         * @access private
-         *
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
-         *
-         * @return bool
-         */
-        private function processJobFromTrackAndTrace(JobInterface $job): bool
-        {
-            $statusChanged = false;
-
-            $trackAndTraceResult = $this->getCarrier()->trackAndTrace($job->getVoucher(), $this->getSoapLanguage())->TrackAndTraceResult ?? null;
-            if($trackAndTraceResult && ($trackAndTraceResult->Result ?? CarrierInterface::RESULT_CODE_INVALID) === CarrierInterface::RESULT_CODE_SUCCESS)
-            {
-                $checkpoints = $trackAndTraceResult->Checkpoints ?? [];
-                if(isset($checkpoints->Checkpoint) && is_array($checkpoints->Checkpoint) && count($checkpoints->Checkpoint))
-                {
-                    $checkpoints = $checkpoints->Checkpoint;
-                }
-
-                $genikiStatus = null;
-
-                foreach((array) $checkpoints as $checkpoint)
-                {
-                    $checkpointStatus = $checkpoint->Status ?? null;
-                    if($checkpointStatus)
-                    {
-                        $genikiStatus = $checkpointStatus;
-                    }
-                }
-
-                if($genikiStatus)
-                {
-                    $statusMap = $this->getStatusMap();
-                    if(isset($statusMap[$genikiStatus]))
-                    {
-                        $status = (int) $statusMap[$genikiStatus];
-                        $statusChanged = $job->getStatus() !== $status;
-                        if($statusChanged)
-                        {
-                            $job->setStatus($status);
-                        }
-                    }
-                }
-            }
-
-            return $statusChanged;
-        }
-
-        /**
          * @inheritdoc
          */
         public function updateJobs(int $limit): void
@@ -157,23 +102,6 @@
             $searchCriteriaBuilder = $this->getSearchCriteriaBuilder();
             $searchCriteriaBuilder->setPageSize($limit);
             foreach($this->getJobRepository()->getList($searchCriteriaBuilder->create())->getItems() as $job)
-            {
-                $this->processJob($job);
-            }
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function updateJobsWithStatus(int $status, int $limit): void
-        {
-            $searchCriteriaBuilder = $this->getSearchCriteriaBuilder();
-            $searchCriteriaBuilder->setPageSize($limit);
-            $searchCriteriaBuilder->addFilter(JobResourceInterface::FIELD_STATUS, $status, 'eq');
-            $searchCriteria = $searchCriteriaBuilder->create();
-            $searchCriteriaBuilder->setFilterGroups([]);
-
-            foreach($this->getJobRepository()->getList($searchCriteria)->getItems() as $job)
             {
                 $this->processJob($job);
             }
@@ -201,24 +129,24 @@
         }
 
         /**
-         * Carrier property
+         * Taxydromiki property
          *
          * @access private
          *
-         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
+         * @var \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface
          */
-        private $_carrier;
+        private $_taxydromiki;
 
         /**
-         * Gets Carrier
+         * Gets Taxydromiki
          *
          * @access protected
          *
-         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\CarrierInterface
+         * @return \Hippiemonkeys\ShippingTaxydromiki\Api\TaxydromikiInterface
          */
-        protected function getCarrier(): CarrierInterface
+        protected function getTaxydromiki(): TaxydromikiInterface
         {
-            return $this->_carrier;
+            return $this->_taxydromiki;
         }
 
         /**
@@ -240,39 +168,6 @@
         protected function getJobRepository(): JobRepositoryInterface
         {
             return $this->_jobRepository;
-        }
-
-        /**
-         * Status Map property
-         *
-         * @access private
-         *
-         * @var string[] $_statusMap
-         */
-        private $_statusMap;
-
-        /**
-         * Gets Status Map
-         *
-         * @access protected
-         *
-         * @return string[]
-         */
-        protected function getStatusMap(): array
-        {
-            return $this->_statusMap;
-        }
-
-        /**
-         * Gets taxydromiki Application Key credential
-         *
-         * @access private
-         *
-         * @return string
-         */
-        private function getSoapLanguage(): string
-        {
-            return $this->getConfig()->getData('soap_language');
         }
 
         /**

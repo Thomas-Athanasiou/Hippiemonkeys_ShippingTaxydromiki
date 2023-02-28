@@ -12,11 +12,11 @@
 
     declare(strict_types=1);
 
-    namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Job;
+    namespace Hippiemonkeys\ShippingTaxydromiki\Model\ResourceModel\Resolution;
 
-    use Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobSearchResultInterface as SearchResultInterface,
-        Hippiemonkeys\ShippingTaxydromiki\Model\Job as Model,
-        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\JobResourceInterface as ResourceInterface,
+    use Hippiemonkeys\ShippingTaxydromiki\Api\Data\StatusResolutionSearchResultInterface as SearchResultInterface,
+        Hippiemonkeys\ShippingTaxydromiki\Model\StatusResolution as Model,
+        Hippiemonkeys\ShippingTaxydromiki\Model\Spi\StatusResolutionResourceInterface as ResourceInterface,
         Hippiemonkeys\Core\Model\ResourceModel\Collection\AbstractCollection;
 
     class Collection

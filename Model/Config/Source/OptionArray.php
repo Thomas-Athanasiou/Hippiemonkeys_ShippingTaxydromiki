@@ -12,12 +12,12 @@
 
     declare(strict_types=1);
 
-    namespace Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source\Carrier;
+    namespace Hippiemonkeys\ShippingTaxydromiki\Model\Config\Source;
 
-    use Magento\Framework\Option\ArrayInterface;
+    use Magento\Framework\Data\OptionSourceInterface;
 
     class OptionArray
-    implements ArrayInterface
+    implements OptionSourceInterface
     {
         /**
          * Constructor
@@ -38,7 +38,15 @@
          */
         public function toOptionArray()
         {
-            return $this->getOptionArray();
+            $optionArray = $this->getOptionArray();
+            return \array_map(
+                function($value, $label): array
+                {
+                    return ['value' => $value, 'label' => $label];
+                },
+                array_keys($optionArray),
+                $optionArray
+            );
         }
 
         /**

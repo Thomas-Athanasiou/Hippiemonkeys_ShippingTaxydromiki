@@ -11,7 +11,6 @@
         <column xsi:type="varchar" name="voucher" nullable="false" length="64" comment="Job Voucher" />
         <column xsi:type="smallint" name="canceled" nullable="false" comment="Job Canceled" />
         <column xsi:type="smallint" name="closed" nullable="false" comment="Job Closed" />
-        <column xsi:type="smallint" name="status" nullable="true" comment="Job Status" />
         <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_JOB_ID_PK">
             <column name="id" />
         </constraint>
@@ -41,5 +40,25 @@
         <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_SHOP_ID_PK">
             <column name="id" />
         </constraint>
+    </table>
+    <table name="hippiemonkeys_shippingtaxydromiki_statusresolution" resource="default" engine="innodb" comment="Hippiemonkeys Shipping - Taxydromiki - Status Resolution">
+        <column xsi:type="int" name="id" nullable="false" unsigned="true" identity="true" comment="Status Resolution ID" />
+        <column xsi:type="varchar" length="256" name="code" nullable="false" comment="Status Resolution Code" />
+        <column xsi:type="int" name="status_id" nullable="false" unsigned="true" comment="Status ID" />
+        <constraint xsi:type="unique" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_STATUSRESOLUTION_CODE_UN">
+            <column name="code" />
+        </constraint>
+        <constraint xsi:type="primary" referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_STATUSRESOLUTION_ID_PK">
+            <column name="id" />
+        </constraint>
+        <constraint
+            xsi:type="foreign"
+            referenceId="HIPPIEMONKEYS_SHIPPINGTAXYDROMIKI_STATUSRESOLUTION_STATUS_ID_STATUS_ID"
+            table="hippiemonkeys_shippingtaxydromiki_statusresolution"
+            column="status_id"
+            referenceTable="hippiemonkeys_shippingtrack_status"
+            referenceColumn="id"
+            onDelete="CASCADE"
+        />
     </table>
 </schema>

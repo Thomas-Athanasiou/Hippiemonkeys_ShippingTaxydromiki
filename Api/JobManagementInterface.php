@@ -26,12 +26,12 @@
          *
          * @access public
          *
-         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\JobInterface $job
+         * @param \Hippiemonkeys\ShippingTaxydromiki\Api\Data\JobInterface $job
          */
         function processJob(JobInterface $job): void;
 
         /**
-         * Updates persistent jobs from the external carrier service
+         * Updates persistent jobs from the external taxydromiki service
          *
          * @api
          * @access public
@@ -39,16 +39,5 @@
          * @param int $limit
          */
         function updateJobs(int $limit): void;
-
-        /**
-         * Updates persistent jobs having the specidfied status from the external carrier service
-         *
-         * @api
-         * @access public
-         *
-         * @param int $status
-         * @param int $limit
-         */
-        function updateJobsWithStatus(int $status, int $limit): void;
     }
 ?>
